@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * Implementation of hook_install().
+ */
+function virdini_settings_install() {
+  drupal_install_schema('virdini_settings');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function virdini_settings_uninstall() {
+  drupal_uninstall_schema('virdini_settings');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function virdini_settings_enable() {
+
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function virdini_settings_schema() {
+ $schema = array();
+ return $schema;
+}

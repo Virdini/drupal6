@@ -1,0 +1,45 @@
+<?php
+/*
+ *
+ *@author: Tsybenko Alexander <http://tsybenko.info> <alexander@tsybenko.info>
+ */
+
+/**
+* Implementation of hook_menu().
+*/
+function virdini_settings_menu(){
+  $items = array();
+  $items['admin/settings/sitesetings'] = array(
+    'title' => 'Site settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('virdini_settings_admin_settings_form'),
+    'access arguments' => array('site administer'),
+    'file' => 'virdini_settings.admin.php',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+* Implementation of hook_perm().
+*/
+function virdini_settings_perm() {
+  $perms = array('site administer');
+  return $perms;
+}
+
+function virdini_settings_preprocess_page(&$vars){
+  $text = t('Site developed and maintained by the company Virdini.com');
+  $image_path = drupal_get_path('module', 'virdini_settings') .'/virdini_developed.png';
+  $image = theme('image', $image_path, $text, $text);
+  $url = 'http://virdini.com';
+  $attributes = array(
+    'html' =>TRUE,
+    'absolute' => TRUE,
+    'attributes' => array(
+      'rel' => '_blank',
+      'title' => $text,
+    ),
+  );
+  $vars['developed'] = l($image, $url, $attributes);
+}

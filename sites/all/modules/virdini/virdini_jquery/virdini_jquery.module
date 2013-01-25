@@ -1,0 +1,226 @@
+<?php
+/**
+ * Updates Drupal to use 1.8.0 version of jQuery. (This module is forked from jquery_update module and implements the 1.8.0 port)
+ * @author: Tsybenko Alexander <http://tsybenko.info> <alexander@tsybenko.info>
+ */
+
+/**
+ * The path to the jQuery files that need to be replaced.
+ */
+define('VIRDINI_JQUERY_REPLACE_PATH', drupal_get_path('module', 'virdini_jquery') .'/replace');
+
+/**
+ * Array of jQuery files to replace if jQuery is loaded.
+ */
+function virdini_jquery_get_replacements() {
+  $replacements = array(
+    'module' => array(
+      'misc/farbtastic/farbtastic.js' => 'farbtastic.js',
+      'misc/teaser.js' => 'teaser.js',
+      'misc/jquery.form.js' => 'jquery.form.js',
+      'misc/ahah.js' => 'ahah.js',
+      'misc/tabledrag.js' => 'tabledrag.js',
+    ),
+    'core' => array(
+      'misc/tabledrag.js' => 'tabledrag.js',
+    ),
+  );
+  
+  $list = module_list();
+  if(array_key_exists('admin', $list)){
+    $module_path = drupal_get_path('module', 'admin');
+    $replacements['module'][$module_path.'/includes/jquery.drilldown.js'] = 'jquery.drilldown.js';
+    $replacements['module'][$module_path.'/includes/admin.toolbar.js'] = 'admin.toolbar.js';
+    $replacements['module'][$module_path.'/includes/admin.menu.js'] = 'admin.menu.js';
+  }
+  if(array_key_exists('content', $list)){
+    $module_path = drupal_get_path('module', 'content');
+    $replacements['module'][$module_path.'/content.js'] = 'content.js';
+  }
+  if(array_key_exists('i18n', $list)){
+    $module_path = drupal_get_path('module', 'i18n');
+    $replacements['module'][$module_path.'/i18n.js'] = 'i18n.js';
+  }
+  if(array_key_exists('views', $list)){
+    $module_path = drupal_get_path('module', 'views');
+    $replacements['module'][$module_path.'/js/dependent.js'] = 'dependent.js';
+  }
+  if(array_key_exists('filefield', $list)){
+    $module_path = drupal_get_path('module', 'filefield');
+    $replacements['module'][$module_path.'/filefield.js'] = 'filefield.js';
+  }
+  if(array_key_exists('imce', $list)){
+    $module_path = drupal_get_path('module', 'imce');
+    $replacements['module'][$module_path.'/js/jquery.form.js'] = 'jquery.form.js';
+  }
+  return $replacements;
+}
+
+/**
+ * Implementation of hook_theme_registry_alter().
+ *
+ * Make jQuery Update's page preprocess function run *after* everything else's,
+ * so that a theme can't call drupal_get_js() and mess everything up.
+ */
+function virdini_jquery_theme_registry_alter(&$theme_registry) {
+  if (isset($theme_registry['page'])) {
+    if (count($theme_registry['page']['preprocess functions']) > 0) {
+      // If virdini_jquery's preprocess function is there already, remove it.
+      if ($key = array_search('virdini_jquery_preprocess_page', $theme_registry['page']['preprocess functions'])) {
+        unset($theme_registry['page']['preprocess functions'][$key]);
+      }
+    }
+    // Now tack it on at the end so it runs after everything else.
+    $theme_registry['page']['preprocess functions'][] = 'virdini_jquery_preprocess_page';
+  }
+}
+
+/**
+ * Fix for page templates in imce.module
+ */
+if(!function_exists('jquery_update_preprocess_page')){
+  function jquery_update_preprocess_page(&$variables){
+    virdini_jquery_preprocess_page(&$variables);
+  }
+}
+
+/**
+ * Fix for colorbox_requirements
+ */
+if(!function_exists('jquery_update_get_version')){
+  function jquery_update_get_version($jquery_path = NULL) {
+    return '1.3.2';
+  }
+}
+
+/**
+ * Replace Drupal core's jquery.js with the new one from Virdini jQuery module.
+ */
+function virdini_jquery_preprocesser(&$scripts){
+  $new_scripts = array();
+  // Replace jquery.js first.
+  $new_jquery = array(virdini_jquery_path() => $scripts['core']['misc/jquery.js']);
+  $scripts['core'] = array_merge($new_jquery, $scripts['core']);
+  unset($scripts['core']['misc/jquery.js']);
+  $replacements = virdini_jquery_get_replacements();
+  foreach($scripts as $type => $script){
+    foreach($script as $key => $params){
+      if (isset($replacements[$type][$key])) {
+        $key = VIRDINI_JQUERY_REPLACE_PATH .'/'. $replacements[$type][$key];
+      }
+      $new_scripts[$type][$key] = $params;
+    }
+  }
+  $scripts = $new_scripts;
+}
+
+/**
+ * Implement of hook_preprocess_hook().
+ */
+function virdini_jquery_preprocess_page(&$variables) {
+  // Only do this for pages that have JavaScript on them.
+  if (!empty($variables['scripts'])) {
+    if (variable_get('virdini_jquery_replace', TRUE) && !variable_get('advagg_enabled', FALSE)) {
+      // Get an array of all the JavaScript files loaded by Drupal on this page.
+      $scripts = drupal_add_js();
+      virdini_jquery_preprocesser($scripts);
+      $variables['scripts'] = drupal_get_js('header', $scripts);
+    }
+  }
+}
+
+/**
+ * Implement hook_advagg_js_pre_alter.
+ */
+function virdini_jquery_advagg_js_pre_alter(&$javascript, $preprocess_js, $public_downloads, $scope) {
+  if (variable_get('virdini_jquery_replace', TRUE)) {
+    virdini_jquery_preprocesser($javascript);
+  }
+}
+
+/**
+ * Return the version of jQuery that is installed.
+ *
+ * This can be used by other modules' hook_requirements() to ensure that the
+ * proper version of jQuery is installed.
+ *
+ * @see version_compare
+ */
+function virdini_jquery_get_version($jquery_path = NULL) {
+  $version = 0;
+  $pattern = '/\sv([0-9\.a-z]+)/';
+  // No file is passed in so default to the file included with this module.
+  if (is_null($jquery_path)) {
+    $jquery_path = virdini_jquery_path();
+  }
+  // Return the version provided by jQuery Update.
+  $jquery = file_get_contents($jquery_path);
+  if (preg_match($pattern, $jquery, $matches)) {
+    $version = $matches[1];
+  }
+  return $version;
+}
+
+/**
+ * Implementation of hook_flush_caches().
+ */
+function virdini_jquery_flush_caches() {
+  // Find the versions of jQuery provided by core and this module.
+  $virdini_jquery_version = virdini_jquery_get_version();
+  $jquery_core_version = virdini_jquery_get_version('misc/jquery.js');
+  // Set a variable according to whether core's version needs to be replaced.
+  $replace = version_compare($jquery_core_version, $virdini_jquery_version, '<');
+  variable_set('virdini_jquery_replace', $replace);
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function virdini_jquery_menu() {
+  $items['admin/settings/virdini_jquery_update'] = array(
+    'title' => 'Virdini jQuery Update',
+    'description' => 'Configure settings for Virdini jQuery Update module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('virdini_jquery_settings'),
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Admin settings form.
+ */
+function virdini_jquery_settings() {
+  // Clear the JavaScript cache when the setting is updated and check version of jquery file.
+  $form['#submit'][] = 'drupal_clear_js_cache';
+  $form['#submit'][] = 'virdini_jquery_flush_caches';
+
+  $form['virdini_jquery_compression_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Choose jQuery compression level'),
+    '#options' => array(
+      'min' => t('Production (Minified)'),
+      'none' => t('Development (Uncompressed Code)'),
+    ),
+    '#default_value' => variable_get('virdini_jquery_compression_type', 'min'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Return the path to the jQuery file.
+ */
+function virdini_jquery_path() {
+	$jquery_file = array('none' => 'jquery.js', 'min' => 'jquery.min.js');
+	return VIRDINI_JQUERY_REPLACE_PATH .'/'. $jquery_file[variable_get('virdini_jquery_compression_type', 'min')];
+}
+
+function virdini_jquery_system_info_alter(&$info, $file) {
+  if(!empty($file->info['dependencies'])){
+    $key = array_search('jquery_update',$file->info['dependencies']);
+    if($key !== false){
+      $file->info['dependencies'][$key] = 'virdini_jquery';
+    }
+  }
+}

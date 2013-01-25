@@ -1,0 +1,20 @@
+name = "Virdini.com"
+description = "Theme designed by Virdini.сom for this site."
+core = "6.x"
+project = "virdini"
+version = "6.x-1.0-dev"
+engine = "phptemplate"
+
+stylesheets[all][]   = css/style.css
+stylesheets[all][]   = css/forms-style.css
+
+scripts[] = js/script.js
+
+regions[left] = Left region
+regions[main_menu] = Main menu
+regions[right] = Right region
+regions[content] = Content
+regions[header] = Header region
+regions[footer] = Footer region
+regions[lang] = Languages
+regions[search] = Search
