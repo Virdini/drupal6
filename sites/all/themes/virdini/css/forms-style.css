@@ -43,40 +43,55 @@ textarea {
 }
 
 /* Tabs */
-.tabs:after,
+.tabs.secondary:after,
 .tabs.primary:after {
   clear: both;
 }
-.tabs > li > a,
+.tabs.secondary > li > a,
 .tabs.primary > li > a {
 	padding-right: 12px;
 	padding-left: 12px;
 	margin-right: 2px;
 	line-height: 14px;
 }
-.tabs, .tabs.primary {
-	padding-left: 0;
-	margin-left: 0;
+.tabs.secondary, .tabs.primary {
+	padding: 0;
+	margin: 5px 0 15px;
 	border-bottom: 1px solid #dddddd;
 }
-.tabs > li, .tabs.primary > li {
+.tabs.secondary > li, .tabs.primary > li {
 	display: inline-block;
 	height: 26px;
+	border: none;
+	padding: 0;
 }
-.tabs > li > a, .tabs.primary > li > a {
+.tabs.primary li a,
+.tabs.secondary li a {
+	background-color: #DDDDDD;
+	border-color: #BBBBBB;
+	border-style: solid solid none;
+	border-width: 1px;
+	height: auto;
+	margin-right: 0.5em;
+	padding: 0 1em;
+	text-decoration: none;
+}
+.tabs.secondary > li > a, .tabs.primary > li > a {
   padding-top: 8px;
-  padding-bottom: 8px;
+  padding-bottom: 7px;
   line-height: 20px;
-  border: 1px solid transparent;
 	-webkit-border-radius: 4px 4px 0 0;
 	-moz-border-radius: 4px 4px 0 0;
 	border-radius: 4px 4px 0 0;
 }
-.tabs > li > a:hover, .tabs.primary > li > a:hover {
+.tabs.secondary > li > a {
+	padding-bottom: 6px;
+}
+.tabs.secondary > li > a:hover, .tabs.primary > li > a:hover {
   border-color: #eeeeee #eeeeee #dddddd;
 }
-.tabs > .active > a,
-.tabs > .active > a:hover,
+.tabs.secondary > .active > a,
+.tabs.secondary > .active > a:hover,
 .tabs.primary > .active > a,
 .tabs.primary > .active > a:hover {
   color: #555555;
