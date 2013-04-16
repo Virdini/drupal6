@@ -361,10 +361,8 @@ function smtp_drupal_mail_wrapper($message) {
 
 
   // Set the from name and e-mail address.
-  if (variable_get('smtp_fromname', '') != '') {
-    $from_name = variable_get('smtp_fromname', '');
-  }
-  else {
+  $from_name = variable_get('smtp_fromname', '');
+  if($from_name == '') {
     // If value is not defined in settings, use site_name.
     $from_name = variable_get('site_name', '');
   }
@@ -389,8 +387,8 @@ function smtp_drupal_mail_wrapper($message) {
   if ($from == NULL || $from == '') {
     // If from e-mail address is blank, use smtp_from config option.
     if (($from = variable_get('smtp_from', '')) == '') {
-      // If smtp_from config option is blank, use site_email.
-      if (($from = variable_get('site_email', '')) == '') {
+      // If smtp_from config option is blank, use site_mail.
+      if (($from = variable_get('site_mail', '')) == '') {
         drupal_set_message(t('There is no submitted from address.'), 'error');
         watchdog('smtp', 'There is no submitted from address.', array(), WATCHDOG_ERROR);
         return FALSE;
@@ -403,8 +401,8 @@ function smtp_drupal_mail_wrapper($message) {
       $from = variable_get('smtp_from', '');
     }
     else {
-      // If smtp_from config option is blank, use site_email.
-      $from = variable_get('site_email', '');
+      // If smtp_from config option is blank, use site_mail.
+      $from = variable_get('site_mail', '');
     }
   }
  */
@@ -463,7 +461,7 @@ function smtp_drupal_mail_wrapper($message) {
       case 'content-type':
   // Parse several values on the Content-type header, storing them in an array like
   // key=value -> $vars['key']='value'
-  $vars = explode('; ', $value);
+  $vars = preg_split('/;[\s]*/', $value);
   foreach ($vars as $i => $var) {
     if ($cut = strpos($var, '=')) {
       $new_var = drupal_strtolower(drupal_substr($var, $cut + 1));
@@ -473,11 +471,9 @@ function smtp_drupal_mail_wrapper($message) {
     }
   }
 
-        // Set the charset based on the provided value, if there is one.
-        $charset = $vars['charset'];
-        if ($charset) {
-          $mail->CharSet = $charset;
-        }
+  // Set the charset based on the provided value, otherwise set it to UTF-8 (which is Drupals internal default).
+  $mail->CharSet = isset($vars['charset']) ? $vars['charset'] : 'UTF-8';
+
   switch ($vars[0]) {
     case 'text/plain':
             // The message includes only a plain text part.
@@ -665,10 +661,10 @@ function smtp_drupal_mail_wrapper($message) {
         // $mail->AltBody or $mail->Body, depending on whether there is
         // also a text/html part ot not.
         if (strpos($body_part, 'multipart/alternative')) {
-          // Clean up the text.
-          $body_part = trim(_smtp_remove_headers(trim($body_part)));
           // Get boundary ID from the Content-Type header.
           $boundary2 = _smtp_get_substring($body_part, 'boundary', '"', '"');
+          // Clean up the text.
+          $body_part = trim(_smtp_remove_headers(trim($body_part)));
           // Split the body based on the boundary ID.
           $body_parts2 = _smtp_boundary_split($body_part, $boundary2);
 
@@ -865,20 +861,26 @@ function _smtp_boundary_split($input, $boundary) {
 function _smtp_remove_headers($input) {
   $part_array = explode("\n", $input);
 
-  if (strpos($part_array[0], 'Content') !== FALSE) {
-    if (strpos($part_array[1], 'Content') !== FALSE) {
-      if (strpos($part_array[2], 'Content') !== FALSE) {
-          array_shift($part_array);
-          array_shift($part_array);
-          array_shift($part_array);
+  // will strip these headers according to RFC2045
+  $headers_to_strip = array( 'Content-Type', 'Content-Transfer-Encoding', 'Content-ID', 'Content-Disposition');
+  $pattern = '/^('. implode('|', $headers_to_strip) .'):/';
+
+  while (count($part_array) > 0) {
+
+    $line = rtrim($part_array[0]); // ignore trailing spaces/newlines
+    // if the line starts with a known header string
+    if (preg_match($pattern, $line)) {
+      $line = rtrim(array_shift($part_array));
+      // remove line containing matched header.
+
+      // if line ends in a ';' and the next line starts with four spaces, it's a continuation
+      // of the header split onto the next line. Continue removing lines while we have this condition.
+      while (substr($line, -1) == ';' && count($part_array) > 0 && substr($part_array[0], 0, 4) == '    ') {
+        $line = rtrim(array_shift($part_array));
       }
-      else {
-        array_shift($part_array);
-        array_shift($part_array);
-      }
-    }
-    else {
-      array_shift($part_array);
+    } else {
+      // no match header, must be past headers; stop searching.
+      break;
     }
   }
 
@@ -920,7 +922,7 @@ function _smtp_get_substring($source, $target, $beginning_character, $ending_cha
   return $substring;
 }  //  End of _smtp_get_substring().
 
-if (!strpos(variable_get('smtp_library', ''), 'mimemail') && !function_exists('drupal_mail_wrapper') ) {
+if (!strpos(variable_get('smtp_library', ''), 'mimemail') && !function_exists('drupal_mail_wrapper')  && variable_get('smtp_on', 0)) {
 
   function drupal_mail_wrapper($message) {
     return smtp_drupal_mail_wrapper($message);

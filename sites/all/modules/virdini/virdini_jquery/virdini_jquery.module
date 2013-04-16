@@ -80,7 +80,7 @@ function virdini_jquery_theme_registry_alter(&$theme_registry) {
  */
 if(!function_exists('jquery_update_preprocess_page')){
   function jquery_update_preprocess_page(&$variables){
-    virdini_jquery_preprocess_page(&$variables);
+    virdini_jquery_preprocess_page($variables);
   }
 }
 

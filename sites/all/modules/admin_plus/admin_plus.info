@@ -1,0 +1,4 @@
+name = "Admin Plus"
+description = ""
+package = "Administration"
+core = 6.x

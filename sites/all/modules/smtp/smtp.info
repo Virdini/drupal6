@@ -4,9 +4,9 @@ core = 6.x
 package = Mail
 php = 4.0.0
 
-; Information added by drupal.org packaging script on 2012-09-21
-version = "6.x-1.0"
+; Information added by drupal.org packaging script on 2013-02-13
+version = "6.x-1.1"
 core = "6.x"
 project = "smtp"
-datestamp = "1348254800"
+datestamp = "1360762545"
 
