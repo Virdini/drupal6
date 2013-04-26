@@ -12,27 +12,64 @@ function admin_plus_init() {
 }
 
 /**
-* Implementation of hook_menu().
-*/
-function admin_plus_menu(){
-  $items = array();
-  $items['test'] = array(
-    'title' => 'Test',
-    'page callback' => 'admin_plus_test',
-    'access callback' => TRUE,
-    'type' => MENU_NORMAL_ITEM,
-  );
-  return $items;
-}
-
-function admin_plus_test() {
-  if (!admin_suppress(FALSE) && $blocks = admin_get_admin_blocks()) {
-    $position = admin_get_settings('position');
-    $layout = admin_get_settings('layout');
-    $behavior = admin_get_settings('behavior');
-    $class = admin_get_settings('expanded') ? 'admin-expanded' : '';
-    echo theme('admin_toolbar', $blocks, $position, $layout, $behavior);
+ * Return a themed list of items.
+ *
+ * @param $items
+ *   An array of items to be displayed in the list. If an item is a string,
+ *   then it is used as is. If an item is an array, then the "data" element of
+ *   the array is used as the contents of the list item. If an item is an array
+ *   with a "children" element, those children are displayed in a nested list.
+ *   All other elements are treated as attributes of the list item element.
+ * @param $title
+ *   The title of the list.
+ * @param $type
+ *   The type of list to return (e.g. "ul", "ol")
+ * @param $attributes
+ *   The attributes applied to the list element.
+ * @return
+ *   A string containing the list output.
+ */
+function theme_admin_plus_item_list($items = array(), $title = NULL, $type = 'ul', $attributes = NULL) {
+  if (isset($title)) {
+    $output .= '<h3>'. $title .'</h3>';
   }
+
+  if (!empty($items)) {
+    $output .= "<$type". drupal_attributes($attributes) .'>';
+    $num_items = count($items);
+    foreach ($items as $i => $item) {
+      $attributes = array();
+      $children = array();
+      if (is_array($item)) {
+        foreach ($item as $key => $value) {
+          if ($key == 'data') {
+            $data = $value;
+          }
+          elseif ($key == 'children') {
+            $children = $value;
+          }
+          else {
+            $attributes[$key] = $value;
+          }
+        }
+      }
+      else {
+        $data = $item;
+      }
+      if (count($children) > 0) {
+        $data .= theme_item_list($children, NULL, $type, $attributes); // Render nested list
+      }
+      if ($i == 0) {
+        $attributes['class'] = empty($attributes['class']) ? 'first' : ($attributes['class'] .' first');
+      }
+      if ($i == $num_items - 1) {
+        $attributes['class'] = empty($attributes['class']) ? 'last' : ($attributes['class'] .' last');
+      }
+      $output .= '<li'. drupal_attributes($attributes) .'>'. $data ."</li>\n";
+    }
+    $output .= "</$type>";
+  }
+  return $output;
 }
 
 function admin_plus_form_admin_settings_form_alter (&$form, &$form_state) {
@@ -85,6 +122,14 @@ function admin_plus_theme($existing, $type, $theme, $path) {
     ),
     'template' => 'admin-plus-toolbar',
   );
+  $items['admin_plus_item_list'] = array(
+    'arguments' => array(
+      'items' => array(),
+      'title' => NULL,
+      'type' => 'ul',
+      'attributes' => NULL,
+    ),
+  );
   return $items;
 }
 
@@ -98,11 +143,11 @@ function template_preprocess_admin_plus_toolbar_plus(&$vars) {
       $item = array();
       $item['data'] = '<span>'. $block->subject .'</span>';
       $item['data'] .= in_array($bid, array('admin-theme', 'admin-devel')) ?
-      theme('item_list', array($block->content)) : $block->content;
-      $item['class'] = $block->class;
+      theme('admin_plus_item_list', array($block->content)) : $block->content;
+      $item['class'] = $block->class .' top-level';
       $item['id'] = 'admin-tab-'. $bid;
       $items[] = $item;
     }
-    $vars['content'] = theme('item_list', $items);
+    $vars['content'] = theme('admin_plus_item_list', $items, NULL, 'ul', array('class' => 'flexnav'));
   }
 }
