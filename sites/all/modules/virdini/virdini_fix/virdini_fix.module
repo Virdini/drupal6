@@ -1,0 +1,12 @@
+<?php
+
+/**
+* Implements of hook_nodeapi().
+*/
+function virdini_fix_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
+  switch ($op) {
+    case 'prepare translation':
+        $node->teaser = $node->translation_source->teaser;
+      break;
+  }
+}
