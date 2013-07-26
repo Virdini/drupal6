@@ -10,3 +10,17 @@ function virdini_fix_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
       break;
   }
 }
+
+/**
+ * Implements of hook_form_alter().
+ */
+function virdini_fix_form_alter(&$form, $form_state, $form_id) {
+  global $user;
+  if ($form_id == 'user_profile_form') {
+    if ($form['_account']['#value']->uid == 1 && $user->uid != 1) {
+      $form['#access'] = FALSE;
+      $form = array('form' => $form);
+      $form['access']['#value'] = t('Access denied');
+    }
+  }
+}

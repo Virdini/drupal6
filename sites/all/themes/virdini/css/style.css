@@ -9,7 +9,7 @@ body { margin: 0; font-size: 1em; line-height: 1.4; }
 a { color: #000; }
 a:visited { color: #333; }
 a:hover { color: #333; }
-a:focus { outline: thin dotted; }
+a:focus { outline: none; }
 a:hover, a:active { outline: 0; }
 abbr[title] { border-bottom: 1px dotted; }
 b, strong { font-weight: bold; }
