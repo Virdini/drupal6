@@ -33,14 +33,14 @@ function virdini_fix_menu() {
   $items['403.html'] = array(
     'title' => 'Access denied',
     'page callback' => 'virdini_fix_error_page',
-    'page arguments' => array(403),
+    'page arguments' => array('403'),
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
   $items['404.html'] = array(
     'title' => 'Page not found',
     'page callback' => 'virdini_fix_error_page',
-    'page arguments' => array(404),
+    'page arguments' => array('404'),
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
