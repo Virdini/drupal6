@@ -24,3 +24,39 @@ function virdini_fix_form_alter(&$form, $form_state, $form_id) {
     }
   }
 }
+
+/**
+ * Implements of hook_menu().
+ */
+function virdini_fix_menu() {
+  $items = array();
+  $items['403.html'] = array(
+    'title' => 'Access denied',
+    'page callback' => 'virdini_fix_error_page',
+    'page arguments' => array(403),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  $items['404.html'] = array(
+    'title' => 'Page not found',
+    'page callback' => 'virdini_fix_error_page',
+    'page arguments' => array(404),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function virdini_fix_error_page($code = 404) {
+  $output = '<div class="error-page-"'. $code .'>'. $code .'</div>';
+  return $output;
+}
+
+/**
+ * Implements of hook_preprocess_page().
+ */
+function virdini_fix_preprocess_page(&$vars){
+  if (arg(0) == '403.html' || arg(0) == '404.html') {
+    $vars['template_files'][] = 'error-page';
+  }
+}
