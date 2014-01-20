@@ -991,7 +991,7 @@ function t($string, $args = array(), $langcode = NULL) {
 /**
  * Verifies the syntax of the given e-mail address.
  *
- * See RFC 2822 for details.
+ * See @link http://tools.ietf.org/html/rfc5322 RFC 5322 @endlink for details.
  *
  * @param $mail
  *   A string containing an e-mail address.
@@ -2550,60 +2550,9 @@ function drupal_to_js($var) {
       return $var;
     case 'resource':
     case 'string':
-      // Always use Unicode escape sequences (\u0022) over JSON escape
-      // sequences (\") to prevent browsers interpreting these as
-      // special characters.
-      $replace_pairs = array(
-        // ", \ and U+0000 - U+001F must be escaped according to RFC 4627.
-        '\\' => '\u005C',
-        '"' => '\u0022',
-        "\x00" => '\u0000',
-        "\x01" => '\u0001',
-        "\x02" => '\u0002',
-        "\x03" => '\u0003',
-        "\x04" => '\u0004',
-        "\x05" => '\u0005',
-        "\x06" => '\u0006',
-        "\x07" => '\u0007',
-        "\x08" => '\u0008',
-        "\x09" => '\u0009',
-        "\x0a" => '\u000A',
-        "\x0b" => '\u000B',
-        "\x0c" => '\u000C',
-        "\x0d" => '\u000D',
-        "\x0e" => '\u000E',
-        "\x0f" => '\u000F',
-        "\x10" => '\u0010',
-        "\x11" => '\u0011',
-        "\x12" => '\u0012',
-        "\x13" => '\u0013',
-        "\x14" => '\u0014',
-        "\x15" => '\u0015',
-        "\x16" => '\u0016',
-        "\x17" => '\u0017',
-        "\x18" => '\u0018',
-        "\x19" => '\u0019',
-        "\x1a" => '\u001A',
-        "\x1b" => '\u001B',
-        "\x1c" => '\u001C',
-        "\x1d" => '\u001D',
-        "\x1e" => '\u001E',
-        "\x1f" => '\u001F',
-        // Prevent browsers from interpreting these as as special.
-        "'" => '\u0027',
-        '<' => '\u003C',
-        '>' => '\u003E',
-        '&' => '\u0026',
-        // Prevent browsers from interpreting the solidus as special and
-        // non-compliant JSON parsers from interpreting // as a comment.
-        '/' => '\u002F',
-        // While these are allowed unescaped according to ECMA-262, section
-        // 15.12.2, they cause problems in some JSON parsers.
-        "\xe2\x80\xa8" => '\u2028', // U+2028, Line Separator.
-        "\xe2\x80\xa9" => '\u2029', // U+2029, Paragraph Separator.
-      );
-
-      return '"'. strtr($var, $replace_pairs) .'"';
+      return '"'. str_replace(array("\r", "\n", "<", ">", "&"),
+                              array('\r', '\n', '\x3c', '\x3e', '\x26'),
+                              addslashes($var)) .'"';
     case 'array':
       // Arrays in JSON can't be associative. If the array is empty or if it
       // has sequential whole number keys starting with 0, it's not associative
@@ -2626,7 +2575,6 @@ function drupal_to_js($var) {
       return 'null';
   }
 }
-
 
 /**
  * Return data in JSON format.
@@ -2686,7 +2634,7 @@ function drupal_urlencode($text) {
  */
 function drupal_get_private_key() {
   if (!($key = variable_get('drupal_private_key', 0))) {
-    $key = md5(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+    $key = drupal_random_key();
     variable_set('drupal_private_key', $key);
   }
   return $key;
@@ -2718,7 +2666,7 @@ function drupal_get_token($value = '') {
  */
 function drupal_valid_token($token, $value = '', $skip_anonymous = FALSE) {
   global $user;
-  return (($skip_anonymous && $user->uid == 0) || ($token == md5(session_id() . $value . variable_get('drupal_private_key', ''))));
+  return (($skip_anonymous && $user->uid == 0) || ($token === md5(session_id() . $value . variable_get('drupal_private_key', ''))));
 }
 
 /**
@@ -2776,6 +2724,10 @@ function _drupal_bootstrap_full() {
   fix_gpc_magic();
   // Load all enabled modules
   module_load_all();
+  // Ensure mt_rand is reseeded, to prevent random values from one page load
+  // being exploited to predict random values in subsequent page loads.
+  $seed = unpack("L", drupal_random_bytes(4));
+  mt_srand($seed[1]);
   // Let all modules take action before menu system handles the request
   // We do not want this while running update.php.
   if (!defined('MAINTENANCE_MODE') || MAINTENANCE_MODE != 'update') {
