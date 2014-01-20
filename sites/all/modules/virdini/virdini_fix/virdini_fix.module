@@ -22,6 +22,22 @@ function virdini_fix_form_alter(&$form, $form_state, $form_id) {
       $form = array('form' => $form);
       $form['access']['#value'] = t('Access denied');
     }
+    if ($form['_account']['#value']->uid == 1 && isset($form['delete'])) {
+      unset($form['delete']);
+    }
+  }
+  if ($form_id == 'user_confirm_delete' && $form['_account']['#value']->uid == 1) {
+    $form['#access'] = FALSE;
+    $form = array('form' => $form);
+    $form['access']['#value'] = t('Access denied');
+  }
+  if ($form_id == 'user_multiple_delete_confirm') {
+    if (isset($form['accounts'][1]) && $form['accounts'][1]['#value'] == 1) {
+      unset($form['accounts'][1]);
+    }
+  }
+  if ($form_id == 'user_admin_account' && isset($form['accounts']['#options'][1])) {
+    unset($form['accounts']['#options'][1]);
   }
 }
 
