@@ -31,7 +31,9 @@ function virdini_settings_perm() {
 function virdini_settings_preprocess_page(&$vars){
   $text = t('Site developed and maintained by the company Virdini.com');
   $image_path = drupal_get_path('module', 'virdini_settings') .'/virdini_developed.png';
+  $image_path1 = drupal_get_path('module', 'virdini_settings') .'/virdini_developed_white.png';
   $image = theme('image', $image_path, $text, $text);
+  $image1 = theme('image', $image_path, $text, $text);
   $url = 'http://virdini.com';
   $attributes = array(
     'html' =>TRUE,
@@ -42,4 +44,5 @@ function virdini_settings_preprocess_page(&$vars){
     ),
   );
   $vars['developed'] = l($image, $url, $attributes);
+  $vars['developed1'] = l($image1, $url, $attributes);
 }
