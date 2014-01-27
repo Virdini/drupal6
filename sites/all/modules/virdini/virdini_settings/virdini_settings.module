@@ -33,7 +33,7 @@ function virdini_settings_preprocess_page(&$vars){
   $image_path = drupal_get_path('module', 'virdini_settings') .'/virdini_developed.png';
   $image_path1 = drupal_get_path('module', 'virdini_settings') .'/virdini_developed_white.png';
   $image = theme('image', $image_path, $text, $text);
-  $image1 = theme('image', $image_path, $text, $text);
+  $image1 = theme('image', $image_path1, $text, $text);
   $url = 'http://virdini.com';
   $attributes = array(
     'html' =>TRUE,
