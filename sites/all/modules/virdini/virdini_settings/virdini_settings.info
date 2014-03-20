@@ -2,4 +2,4 @@ name = "Settings"
 description = "Settings for current site"
 package = " Virdini"
 core = 6.x
-version = "6.x-1.0-dev"
+project = "virdini"

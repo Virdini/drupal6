@@ -2,3 +2,4 @@ name = "Fix"
 description = "Fix drupal core & modules"
 package = " Virdini"
 core = 6.x
+project = "virdini"
