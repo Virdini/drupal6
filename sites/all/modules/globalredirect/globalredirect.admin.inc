@@ -20,6 +20,12 @@ function globalredirect_settings() {
     '#description' => t('If enabled, this option will remove the trailing slash from requests. This stops requests such as <code>example.com/node/1/</code> failing to match the corresponding alias and can cause duplicate content. On the other hand, if you require certain requests to have a trailing slash, this feature can cause problems so may need to be disabled.'),
     '#default_value' => $settings['deslash'],
   );
+  
+  $form['settings']['robots'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Disable for robots'),
+    '#default_value' => $settings['robots'],
+  );
 
   $form['settings']['nonclean_to_clean'] = array(
     '#type' => 'checkbox',

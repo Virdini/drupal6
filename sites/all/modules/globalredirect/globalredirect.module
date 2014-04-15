@@ -299,6 +299,13 @@ function _globalredirect_is_active($settings) {
   if (globalredirect_is_cli()) {
     return FALSE;
   }
+  
+  /**
+   * If this is a robot (facebook, google, etc), skip processing.
+   */
+  if ($settings['robots'] && preg_match('/(facebook|google|vk.com|yandex|bing|twitter)/i', $_SERVER['HTTP_USER_AGENT'])) {
+    return FALSE;
+  }
 
   /**
    * If the site is in offline mode there is little point doing any of this as
