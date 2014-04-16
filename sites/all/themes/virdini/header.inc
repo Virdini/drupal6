@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:fb="http://ogp.me/ns/fb#" xmlns:og="http://ogp.me/ns#"
-  lang="<?php echo $language->language; ?>" dir="<?php echo $language->dir; ?>">
-  <head>
+<html lang="<?php echo $language->language; ?>" dir="<?php echo $language->dir; ?>">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object#">
     <title><?php echo $head_title; ?></title>
     <?php echo $head; ?>
     <meta name="viewport" content="width=device-width" />
