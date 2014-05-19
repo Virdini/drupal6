@@ -8,6 +8,7 @@ hooks: {load: [], list: [], navigate: [], cache: []},
 initiate: function() {
   imce.conf = Drupal.settings.imce || {};
   if (imce.conf.error != false) return;
+  imce.ie = (navigator.userAgent.match(/msie (\d+)/i) || ['', 0])[1] * 1;
   imce.FLW = imce.el('file-list-wrapper'), imce.SBW = imce.el('sub-browse-wrapper');
   imce.NW = imce.el('navigation-wrapper'), imce.BW = imce.el('browse-wrapper');
   imce.PW = imce.el('preview-wrapper'), imce.FW = imce.el('forms-wrapper');
@@ -18,6 +19,8 @@ initiate: function() {
   imce.initiateList();//process file list
   imce.initiateOps();//prepare operation tabs
   imce.refreshOps();
+  // Bind global error handler
+  $(document).ajaxError(imce.ajaxError);
   imce.invoke('load', window);//run functions set by external applications.
 },
 
@@ -78,7 +81,7 @@ dirCollapsible: function (branch) {
     if (branch.ul) {
       $(branch.ul).toggle();
       $(branch.li).toggleClass('expanded');
-      $.browser.msie && $('#navigation-header').css('top', imce.NW.scrollTop);
+      imce.ie && $('#navigation-header').css('top', imce.NW.scrollTop);
     }
     else if (branch.clkbl){
       $(branch.a).click();
@@ -256,7 +259,7 @@ setFileOps: function () {
   $(form.elements.filenames).parent().remove();
   $(form).find('fieldset').each(function() {//remove fieldsets
     var $sbmt = $('input:submit', this);
-    if (!$sbmt.size()) return;
+    if (!$sbmt.length) return;
     var Op = {name: $sbmt.attr('id').substr(5)};
     var func = function() {imce.fopSubmit(Op.name); return false;};
     $sbmt.click(func);
@@ -278,7 +281,7 @@ refreshOps: function() {
 //add a new file operation
 opAdd: function (op) {
   var oplist = imce.el('ops-list'), opcons = imce.el('op-contents');
-  var name = op.name || ('op-'+ $(oplist).children('li').size());
+  var name = op.name || ('op-'+ $(oplist).children('li').length);
   var title = op.title || 'Untitled';
   var Op = imce.ops[name] = {title: title};
   if (op.content) {
@@ -322,7 +325,7 @@ opClick: function(name) {
           var $inputs = $('input', imce.ops[imce.vars.op].div);
           $inputs.eq(0).focus();
           //form inputs become invisible in IE. Solution is as stupid as the behavior.
-          $('html').is('.ie') && $inputs.addClass('dummyie').removeClass('dummyie');
+          $('html').hasClass('ie') && $inputs.addClass('dummyie').removeClass('dummyie');
        }
       });
     });
@@ -439,7 +442,19 @@ uploadValidate: function (data, form, options) {
 
 //settings for upload
 uploadSettings: function () {
-  return {beforeSubmit: imce.uploadValidate, success: function (response) {imce.processResponse(Drupal.parseJson(response));}, complete: function () {imce.fopLoading('upload', false);}, resetForm: true};
+  return {
+    beforeSubmit: imce.uploadValidate,
+    success: function (response) {
+      try{
+        imce.processResponse(Drupal.parseJson(response));
+      } catch(e) {}
+    },
+    complete: function () {
+      imce.fopLoading('upload', false);
+    },
+    resetForm: true,
+    dataType: 'text'
+  };
 },
 
 //validate default ops(delete, thumb, resize)
@@ -449,7 +464,7 @@ fopValidate: function(fop) {
     case 'delete':
       return confirm(Drupal.t('Delete selected files?'));
     case 'thumb':
-      if (!$('input:checked', imce.ops['thumb'].div).size()) {
+      if (!$('input:checked', imce.ops['thumb'].div).length) {
         return imce.setMessage(Drupal.t('Please select a thumbnail.'), 'error');
       }
       return imce.validateImage();
@@ -486,7 +501,7 @@ commonSubmit: function(fop) {
 
 //settings for default file operations
 fopSettings: function (fop) {
-  return {url: imce.ajaxURL(fop), type: 'POST', dataType: 'json', success: imce.processResponse, complete: function (response) {imce.fopLoading(fop, false);}, data: imce.vars.opform +'&filenames='+ escape(imce.serialNames()) +'&jsop='+ fop + (imce.ops[fop].div ? '&'+ $('input, select, textarea', imce.ops[fop].div).serialize() : '')};
+  return {url: imce.ajaxURL(fop), type: 'POST', dataType: 'json', success: imce.processResponse, complete: function (response) {imce.fopLoading(fop, false);}, data: imce.vars.opform +'&filenames='+ encodeURIComponent(imce.serialNames()) +'&jsop='+ fop + (imce.ops[fop].div ? '&'+ $('input, select, textarea', imce.ops[fop].div).serialize() : '')};
 },
 
 //toggle loading state
@@ -536,7 +551,7 @@ prepareMsgs: function () {
     $('>div', msgs).each(function (){
       var type = this.className.split(' ')[1];
       var li = $('>ul li', this);
-      if (li.size()) li.each(function () {imce.setMessage(this.innerHTML, type);});
+      if (li.length) li.each(function () {imce.setMessage(this.innerHTML, type);});
       else imce.setMessage(this.innerHTML, type);
     });
     $(msgs).remove();
@@ -701,9 +716,12 @@ processRow: function (row) {
   };
 },
 
-//decode urls. uses unescape. can be overridden to use decodeURIComponent
+//decode urls
 decode: function (str) {
-  return unescape(str);
+  try {
+    return decodeURIComponent(str);
+  } catch(e) {}
+  return str;
 },
 
 //decode and convert to plain text
@@ -771,7 +789,7 @@ updateUI: function() {
     return false;
   }).appendTo('#op-contents')[0];
   //navigation-header
-  if (!$('#navigation-header').size()) {
+  if (!$('#navigation-header').length) {
     $(imce.NW).children('.navigation-text').attr('id', 'navigation-header').wrapInner('<span></span>');
   }
   //log
@@ -788,7 +806,7 @@ updateUI: function() {
     imce.opAdd({name: 'help', title: $('#help-box-title').remove().text(), content: $('#help-box').show()});
   });
   //add ie classes
-  $.browser.msie && $('html').addClass('ie') && parseFloat($.browser.version) < 8 && $('html').addClass('ie-7');
+  imce.ie && $('html').addClass('ie') && imce.ie < 8 && $('html').addClass('ie-7');
   // enable box view for file list
   imce.vars.boxW && imce.boxView();
   //scrolling file list
@@ -801,6 +819,6 @@ updateUI: function() {
 };
 
 //initiate
-$(document).ready(imce.initiate).ajaxError(imce.ajaxError);
+$(document).ready(imce.initiate);
 
 })(jQuery);
