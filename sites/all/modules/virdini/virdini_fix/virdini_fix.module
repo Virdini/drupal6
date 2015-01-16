@@ -76,3 +76,51 @@ function virdini_fix_preprocess_page(&$vars){
     $vars['template_files'][] = 'error-page';
   }
 }
+
+/**
+ * Fixed default mailengine.
+ * From: in headers not properly encoded
+ * https://www.drupal.org/node/1209018
+ *
+ * @param $op
+ *   The operation to perform on the message.
+ * @param $message
+ *   The message to be sent.
+ *
+ * @return
+ *   Returns TRUE if the operation was successful or FALSE if it was not.
+ */
+function virdini_fix_mailengine($op, $message = array()) {
+  switch ($op) {
+    case 'name':
+      return t('Virdini Fix Mime Mail');
+
+    case 'description':
+      return t("Fixed default mailing engine - mimemail_mailengine");
+
+    // Not implemented.
+    case 'settings':
+      return FALSE;
+
+    case 'multiple':
+    case 'single':
+    case 'send':
+      return mimemail_mailengine($op, $message);
+  }
+
+  return FALSE;
+}
+
+/**
+ * Fixed default engine's prepare function.
+ *
+ * @param
+ *   Same parameters as mimemail() except $send.
+ *
+ * @return
+ *   The $message array structure containing all details of the message.
+ */
+function virdini_fix_prepare_message($sender, $recipient, $subject, $body, $plaintext = NULL, $headers = array(), $text = NULL, $attachments = array(), $mailkey = '') {
+  module_load_include('inc', 'virdini_fix', 'virdini_fix.mimemail');
+  return _virdini_fix_prepare_message($sender, $recipient, $subject, $body, $plaintext, $headers, $text, $attachments, $mailkey);
+}
