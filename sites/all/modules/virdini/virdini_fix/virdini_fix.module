@@ -64,7 +64,7 @@ function virdini_fix_menu() {
 }
 
 function virdini_fix_error_page($code = 404) {
-  $output = '<div class="error-page-"'. $code .'>'. $code .'</div>';
+  $output = '<div class="error-page-'. $code .'">'. $code .'</div>';
   return $output;
 }
 
