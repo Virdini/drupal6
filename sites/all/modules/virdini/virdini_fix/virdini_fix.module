@@ -63,7 +63,22 @@ function virdini_fix_menu() {
   return $items;
 }
 
+/**
+ * Implements of hook_flush_caches().
+ * reset file content for fast_404 module
+ */
+function virdini_fix_flush_caches() {
+  $file = './errors/404.html';
+  variable_set('fast_404_html', file_get_contents($file));
+  return array();
+}
+
 function virdini_fix_error_page($code = 404) {
+  $file = './errors/'. $code .'.html';
+  if (file_exists($file)) {
+    echo file_get_contents($file);
+    exit;
+  }
   $output = '<div class="error-page-'. $code .'">'. $code .'</div>';
   return $output;
 }

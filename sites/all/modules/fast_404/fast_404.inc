@@ -2,12 +2,34 @@
 
 function fast_404_ext_check() {
 
-
+  // Work out which $_SERVER variable to work from.  We'll ignore calls to the
+  // homepage, to avoid unnecessary processing.
+  if (!empty($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '/' && $_SERVER['QUERY_STRING'] != '/index.php') {
+    $server_var = 'QUERY_STRING';
+  }
+  elseif (!empty($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] != '/' && $_SERVER['REQUEST_URI'] != '/index.php') {
+    $server_var = 'REQUEST_URI';
+  }
+  // This is the homepage, continue as normal.
+  else {
+    return TRUE;
+  }
+  
   // Check to see if the URL is an imagecache URL. Those are handled via Drupal
-  if (strpos($_SERVER['QUERY_STRING'], 'imagecache')) {
+  if (strpos($_SERVER[$server_var], 'imagecache')) {
 
-    // Check to see if we will allow anon users to access this page
-    if (!variable_get('fast_404_allow_anon_imagecache', TRUE)) {
+    // Check to see if we will allow anon users to access this url
+    if (variable_get('fast_404_allow_anon_imagecache', TRUE)) {
+      // If anonymous can access then anyone can and we'll just pass on by
+      return TRUE; 
+    }
+    else {
+      
+      // This is if you would like to only let your authenticated users genterate the
+      // imagecache variations. Useful for sites like magazines where content 
+      // editors will view all the content and pre-generate the variations
+      // as a part of their process.
+      
       $found_session = FALSE;
 
       // At this stage of the game we don't know if the user is logged in via
@@ -24,25 +46,20 @@ function fast_404_ext_check() {
       if ($found_session) {
         return TRUE;
       }
-
-      // We're allowing anyone to hit non-existing imagecache URLs (default behavior)
-    }
-    else {
-      return TRUE;
     }
   }
 
   // Check to see if the URL is an advagg URL. Those are handled via Drupal
-  if (strpos($_SERVER['QUERY_STRING'], '/advagg_')) {
+  if (strpos($_SERVER[$server_var], '/advagg_')) {
     // We're allowing anyone to hit non-existing advagg URLs (default behavior)
     return TRUE;
   }
 
-  // If we are using URL whitelisting then determine if the current URL is whitelisted
+  // If we are using URL whitelisting then determine if the current URL is whitelisted 
   // before running the extension check
   if (variable_get('fast_404_url_whitelisting', FALSE)) {
     $allowed = variable_get('fast_404_whitelist', array());
-    if (in_array($_SERVER['QUERY_STRING'], $allowed)) {
+    if (in_array($_SERVER[$server_var], $allowed)) {
       return TRUE; // URL is whitelisted. Assumed good.
     }
   }
@@ -51,11 +68,8 @@ function fast_404_ext_check() {
   $exts = variable_get('fast_404_exts', '/\.(txt|png|gif|jpe?g|css|js|ico|swf|flv|cgi|bat|pl|dll|exe|asp|)$/i');
 
   // Determine if URL is in blacklisted extensions
-  if ($exts && preg_match($exts, $_GET['q'], $m)) {
-    header('HTTP/1.0 404 Not Found');
-    $fast_404_html = variable_get('fast_404_html', '<html xmlns="http://www.w3.org/1999/xhtml"><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL "@path" was not found on this server.</p></body></html>');
-    print strtr($fast_404_html, array('@path' => check_plain(request_uri())));
-    exit();
+  if ($exts && preg_match($exts, $_SERVER[$server_var], $m)) {
+    fast_404_error_return();
   }
 
   define('FAST_404_EXT_CHECKED', TRUE);
@@ -64,7 +78,7 @@ function fast_404_ext_check() {
 function fast_404_path_check() {
   $valid = TRUE;
 
-  if (variable_get('fast_404_path_check', FALSE) && isset($_GET['q'])) {
+  if (variable_get('fast_404_path_check', FALSE) && !empty($_GET['q'])) {
 
     // Determine if we have the db_query function. If so, we are in boot and have functions. If not we are in settings.php and do not have functions.
     if (function_exists('db_query')) {
@@ -92,14 +106,14 @@ function fast_404_validate_path_drupal() {
     }
   }
 
-  $sql = "SELECT path FROM {menu_router} WHERE '%s' LIKE CONCAT(path,'%')";
-  $res = db_result(db_query($sql, $_GET['q']));
+  $sql = "SELECT path FROM {menu_router} WHERE '%s' LIKE path OR '%s' LIKE CONCAT(path,'%')";
+  $res = db_result(db_query($sql, $_GET['q'], $_GET['q']));
   if ($res) {
     return TRUE;
   }
   else {
-    $sql = "SELECT pid FROM {url_alias} WHERE '%s' LIKE CONCAT(dst,'%')";
-    $res = db_result(db_query($sql, $_GET['q']));
+    $sql = "SELECT pid FROM {url_alias} WHERE '%s' LIKE dst OR '%s' LIKE CONCAT(dst,'%')";
+    $res = db_result(db_query($sql, $_GET['q'], $_GET['q']));
     return $res == 0 ? FALSE : TRUE;
   }
 
@@ -109,21 +123,17 @@ function fast_404_validate_path_drupal() {
 function fast_404_validate_path_mysql() {
   global $db_url, $db_prefix;
 
-  // Unable to work with multiple connections at present
-  if (is_array($db_url)) {
-    if (isset($db_url['default'])) {
-      $db_url = $db_url['default'];
-    }
-    else {
-      return TRUE; // We can't check this URL here. Return TRUE to let Drupal continue bootstrapping.
-    }
+  // Handle $db_url if it's either a string or the default element of a $db_url array
+  $db_conn = !is_array($db_url) ? $db_url : (isset($db_url['default']) ? $db_url['default'] : NULL);
+  if (!$db_conn) {
+    return TRUE; // We can't check this URL here. Return TRUE to let Drupal continue bootstrapping.
   }
 
   $sql = "SELECT path FROM menu_router WHERE '%s' LIKE CONCAT(path,'%')";
   $sql2 = "SELECT pid FROM url_alias WHERE '%s' LIKE CONCAT(dst,'%')";
   $sql3 = "SELECT rid FROM path_redirect WHERE '%s' LIKE source";
 
-  $url = parse_url($db_url);
+  $url = parse_url($db_conn);
 
   // Decode url-encoded information in the db connection string
   $url['user'] = urldecode($url['user']);
@@ -133,8 +143,8 @@ function fast_404_validate_path_mysql() {
   $url['path'] = str_replace('/', '', urldecode($url['path']));
 
 
-  // Query the database via either mysql or mysqli
-  if (strstr($db_url, 'mysqli')) {
+  // Query the database via either mysql or mysqli 
+  if (strstr($db_conn, 'mysqli')) {
     $conn = mysqli_connect($url['host'], $url['user'], $url['pass'], $url['path'], $url['port']);
 
     //check if path_redirect module is installed
@@ -159,7 +169,7 @@ function fast_404_validate_path_mysql() {
       return TRUE;
     }
   }
-  elseif (strstr($db_url, 'mysql')) {
+  elseif (strstr($db_conn, 'mysql')) {
     if (isset($url['port'])) {
       $url['host'] = $url['host'] . ':' . $url['port'];
     }
