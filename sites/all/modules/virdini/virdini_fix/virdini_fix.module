@@ -69,7 +69,9 @@ function virdini_fix_menu() {
  */
 function virdini_fix_flush_caches() {
   $file = './errors/404.html';
-  variable_set('fast_404_html', file_get_contents($file));
+  if (file_exists($file)) {
+    variable_set('fast_404_html', file_get_contents($file));
+  }
   return array();
 }
 
