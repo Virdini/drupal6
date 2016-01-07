@@ -39,7 +39,7 @@ function virdini_settings_preprocess_page(&$vars){
     'html' =>TRUE,
     'absolute' => TRUE,
     'attributes' => array(
-      'rel' => '_blank',
+      'target' => '_blank',
       'title' => $text,
     ),
   );
