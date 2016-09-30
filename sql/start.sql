@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10.9
--- http://www.phpmyadmin.net
+-- version 4.4.15.8
+-- https://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Apr 12, 2015 at 12:38 PM
--- Server version: 5.1.73
--- PHP Version: 5.3.3
+-- Host: 193.151.90.57
+-- Generation Time: Sep 30, 2016 at 03:38 PM
+-- Server version: 10.1.16-MariaDB
+-- PHP Version: 5.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,10 +14,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tsybenko_virdini`
+-- Database: `tsybenko_drupal6`
 --
 
 -- --------------------------------------------------------
@@ -27,12 +27,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `access` (
-  `aid` int(11) NOT NULL AUTO_INCREMENT,
+  `aid` int(11) NOT NULL,
   `mask` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(255) NOT NULL DEFAULT '',
-  `status` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`aid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `status` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -45,8 +44,7 @@ CREATE TABLE IF NOT EXISTS `actions` (
   `type` varchar(32) NOT NULL DEFAULT '',
   `callback` varchar(255) NOT NULL DEFAULT '',
   `parameters` longtext NOT NULL,
-  `description` varchar(255) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`aid`)
+  `description` varchar(255) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -75,9 +73,8 @@ INSERT INTO `actions` (`aid`, `type`, `callback`, `parameters`, `description`) V
 --
 
 CREATE TABLE IF NOT EXISTS `actions_aid` (
-  `aid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`aid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `aid` int(10) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -86,13 +83,11 @@ CREATE TABLE IF NOT EXISTS `actions_aid` (
 --
 
 CREATE TABLE IF NOT EXISTS `authmap` (
-  `aid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `aid` int(10) unsigned NOT NULL,
   `uid` int(11) NOT NULL DEFAULT '0',
   `authname` varchar(128) NOT NULL DEFAULT '',
-  `module` varchar(128) NOT NULL DEFAULT '',
-  PRIMARY KEY (`aid`),
-  UNIQUE KEY `authname` (`authname`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `module` varchar(128) NOT NULL DEFAULT ''
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -101,13 +96,11 @@ CREATE TABLE IF NOT EXISTS `authmap` (
 --
 
 CREATE TABLE IF NOT EXISTS `batch` (
-  `bid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bid` int(10) unsigned NOT NULL,
   `token` varchar(64) NOT NULL,
   `timestamp` int(11) NOT NULL,
-  `batch` longtext,
-  PRIMARY KEY (`bid`),
-  KEY `token` (`token`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+  `batch` longtext
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -116,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `batch` (
 --
 
 CREATE TABLE IF NOT EXISTS `blocks` (
-  `bid` int(11) NOT NULL AUTO_INCREMENT,
+  `bid` int(11) NOT NULL,
   `module` varchar(64) NOT NULL DEFAULT '',
   `delta` varchar(32) NOT NULL DEFAULT '0',
   `theme` varchar(64) NOT NULL DEFAULT '',
@@ -128,11 +121,8 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   `visibility` tinyint(4) NOT NULL DEFAULT '0',
   `pages` text NOT NULL,
   `title` varchar(64) NOT NULL DEFAULT '',
-  `cache` tinyint(4) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`bid`),
-  UNIQUE KEY `tmd` (`theme`,`module`,`delta`),
-  KEY `list` (`theme`,`status`,`region`,`weight`,`module`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+  `cache` tinyint(4) NOT NULL DEFAULT '1'
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `blocks`
@@ -181,9 +171,7 @@ INSERT INTO `blocks` (`bid`, `module`, `delta`, `theme`, `status`, `weight`, `re
 CREATE TABLE IF NOT EXISTS `blocks_roles` (
   `module` varchar(64) NOT NULL,
   `delta` varchar(32) NOT NULL,
-  `rid` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`module`,`delta`,`rid`),
-  KEY `rid` (`rid`)
+  `rid` int(10) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -193,13 +181,11 @@ CREATE TABLE IF NOT EXISTS `blocks_roles` (
 --
 
 CREATE TABLE IF NOT EXISTS `boxes` (
-  `bid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bid` int(10) unsigned NOT NULL,
   `body` longtext,
   `info` varchar(128) NOT NULL DEFAULT '',
-  `format` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`bid`),
-  UNIQUE KEY `info` (`info`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `format` smallint(6) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -213,9 +199,7 @@ CREATE TABLE IF NOT EXISTS `cache` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -230,9 +214,7 @@ CREATE TABLE IF NOT EXISTS `cache_block` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -247,9 +229,7 @@ CREATE TABLE IF NOT EXISTS `cache_content` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -264,9 +244,7 @@ CREATE TABLE IF NOT EXISTS `cache_filter` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -281,9 +259,7 @@ CREATE TABLE IF NOT EXISTS `cache_form` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -298,9 +274,7 @@ CREATE TABLE IF NOT EXISTS `cache_l10n_update` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -315,9 +289,7 @@ CREATE TABLE IF NOT EXISTS `cache_menu` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -332,9 +304,7 @@ CREATE TABLE IF NOT EXISTS `cache_page` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -349,9 +319,7 @@ CREATE TABLE IF NOT EXISTS `cache_views` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -366,9 +334,7 @@ CREATE TABLE IF NOT EXISTS `cache_views_data` (
   `expire` int(11) NOT NULL DEFAULT '0',
   `created` int(11) NOT NULL DEFAULT '0',
   `headers` text,
-  `serialized` smallint(6) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`cid`),
-  KEY `expire` (`expire`)
+  `serialized` smallint(6) NOT NULL DEFAULT '1'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -378,7 +344,7 @@ CREATE TABLE IF NOT EXISTS `cache_views_data` (
 --
 
 CREATE TABLE IF NOT EXISTS `comments` (
-  `cid` int(11) NOT NULL AUTO_INCREMENT,
+  `cid` int(11) NOT NULL,
   `pid` int(11) NOT NULL DEFAULT '0',
   `nid` int(11) NOT NULL DEFAULT '0',
   `uid` int(11) NOT NULL DEFAULT '0',
@@ -391,13 +357,8 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `thread` varchar(255) NOT NULL,
   `name` varchar(60) DEFAULT NULL,
   `mail` varchar(64) DEFAULT NULL,
-  `homepage` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`cid`),
-  KEY `pid` (`pid`),
-  KEY `nid` (`nid`),
-  KEY `comment_uid` (`uid`),
-  KEY `status` (`status`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `homepage` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -415,8 +376,7 @@ CREATE TABLE IF NOT EXISTS `content_node_field` (
   `module` varchar(127) NOT NULL DEFAULT '',
   `db_columns` mediumtext NOT NULL,
   `active` tinyint(4) NOT NULL DEFAULT '0',
-  `locked` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`field_name`)
+  `locked` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -435,8 +395,7 @@ CREATE TABLE IF NOT EXISTS `content_node_field_instance` (
   `display_settings` mediumtext NOT NULL,
   `description` mediumtext NOT NULL,
   `widget_module` varchar(127) NOT NULL DEFAULT '',
-  `widget_active` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`field_name`,`type_name`)
+  `widget_active` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -446,19 +405,15 @@ CREATE TABLE IF NOT EXISTS `content_node_field_instance` (
 --
 
 CREATE TABLE IF NOT EXISTS `files` (
-  `fid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fid` int(10) unsigned NOT NULL,
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
   `filename` varchar(255) NOT NULL DEFAULT '',
   `filepath` varchar(255) NOT NULL DEFAULT '',
   `filemime` varchar(255) NOT NULL DEFAULT '',
   `filesize` int(10) unsigned NOT NULL DEFAULT '0',
   `status` int(11) NOT NULL DEFAULT '0',
-  `timestamp` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`fid`),
-  KEY `uid` (`uid`),
-  KEY `status` (`status`),
-  KEY `timestamp` (`timestamp`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+  `timestamp` int(10) unsigned NOT NULL DEFAULT '0'
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -467,15 +422,12 @@ CREATE TABLE IF NOT EXISTS `files` (
 --
 
 CREATE TABLE IF NOT EXISTS `filters` (
-  `fid` int(11) NOT NULL AUTO_INCREMENT,
+  `fid` int(11) NOT NULL,
   `format` int(11) NOT NULL DEFAULT '0',
   `module` varchar(64) NOT NULL DEFAULT '',
   `delta` tinyint(4) NOT NULL DEFAULT '0',
-  `weight` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`fid`),
-  UNIQUE KEY `fmd` (`format`,`module`,`delta`),
-  KEY `list` (`format`,`weight`,`module`,`delta`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+  `weight` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `filters`
@@ -497,13 +449,11 @@ INSERT INTO `filters` (`fid`, `format`, `module`, `delta`, `weight`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `filter_formats` (
-  `format` int(11) NOT NULL AUTO_INCREMENT,
+  `format` int(11) NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `roles` varchar(255) NOT NULL DEFAULT '',
-  `cache` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`format`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `cache` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `filter_formats`
@@ -520,13 +470,11 @@ INSERT INTO `filter_formats` (`format`, `name`, `roles`, `cache`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `flood` (
-  `fid` int(11) NOT NULL AUTO_INCREMENT,
+  `fid` int(11) NOT NULL,
   `event` varchar(64) NOT NULL DEFAULT '',
   `hostname` varchar(128) NOT NULL DEFAULT '',
-  `timestamp` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`fid`),
-  KEY `allow` (`event`,`hostname`,`timestamp`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `timestamp` int(11) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -537,9 +485,7 @@ CREATE TABLE IF NOT EXISTS `flood` (
 CREATE TABLE IF NOT EXISTS `history` (
   `uid` int(11) NOT NULL DEFAULT '0',
   `nid` int(11) NOT NULL DEFAULT '0',
-  `timestamp` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`uid`,`nid`),
-  KEY `nid` (`nid`)
+  `timestamp` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -549,15 +495,13 @@ CREATE TABLE IF NOT EXISTS `history` (
 --
 
 CREATE TABLE IF NOT EXISTS `imagecache_action` (
-  `actionid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `actionid` int(10) unsigned NOT NULL,
   `presetid` int(10) unsigned NOT NULL DEFAULT '0',
   `weight` int(11) NOT NULL DEFAULT '0',
   `module` varchar(255) NOT NULL,
   `action` varchar(255) NOT NULL,
-  `data` longtext NOT NULL,
-  PRIMARY KEY (`actionid`),
-  KEY `presetid` (`presetid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `data` longtext NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -566,10 +510,9 @@ CREATE TABLE IF NOT EXISTS `imagecache_action` (
 --
 
 CREATE TABLE IF NOT EXISTS `imagecache_preset` (
-  `presetid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `presetname` varchar(255) NOT NULL,
-  PRIMARY KEY (`presetid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `presetid` int(10) unsigned NOT NULL,
+  `presetname` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -578,8 +521,7 @@ CREATE TABLE IF NOT EXISTS `imagecache_preset` (
 --
 
 CREATE TABLE IF NOT EXISTS `imce_files` (
-  `fid` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`fid`)
+  `fid` int(10) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -598,8 +540,7 @@ CREATE TABLE IF NOT EXISTS `l10n_update_file` (
   `timestamp` int(11) DEFAULT '0',
   `version` varchar(128) NOT NULL DEFAULT '',
   `status` int(11) NOT NULL DEFAULT '1',
-  `last_checked` int(11) DEFAULT '0',
-  PRIMARY KEY (`project`,`language`)
+  `last_checked` int(11) DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -615,8 +556,7 @@ CREATE TABLE IF NOT EXISTS `l10n_update_project` (
   `version` varchar(128) NOT NULL DEFAULT '',
   `l10n_server` varchar(255) NOT NULL DEFAULT '',
   `l10n_path` varchar(255) NOT NULL DEFAULT '',
-  `status` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`name`)
+  `status` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -626,11 +566,11 @@ CREATE TABLE IF NOT EXISTS `l10n_update_project` (
 INSERT INTO `l10n_update_project` (`name`, `project_type`, `core`, `version`, `l10n_server`, `l10n_path`, `status`) VALUES
 ('admin', 'module', '6.x', '6.x-2.0', '', 'http://ftp.drupal.org/files/translations/6.x/admin/admin-6.x-2.0.%language.po', 1),
 ('advagg', 'module', '6.x', '6.x-1.9', '', 'http://ftp.drupal.org/files/translations/6.x/advagg/advagg-6.x-1.9.%language.po', 1),
-('drupal', 'core', '6.x', '6.35', '', 'http://ftp.drupal.org/files/translations/6.x/drupal/drupal-6.35.%language.po', 1),
-('cck', 'module', '6.x', '6.x-2.9', '', 'http://ftp.drupal.org/files/translations/6.x/cck/cck-6.x-2.9.%language.po', 1),
+('drupal', 'core', '6.x', '6.38', '', 'http://ftp.drupal.org/files/translations/6.x/drupal/drupal-6.38.%language.po', 1),
+('cck', 'module', '6.x', '6.x-2.10', '', 'http://ftp.drupal.org/files/translations/6.x/cck/cck-6.x-2.10.%language.po', 1),
 ('ctm', 'module', '6.x', '6.x-1.1', '', 'http://ftp.drupal.org/files/translations/6.x/ctm/ctm-6.x-1.1.%language.po', 1),
-('fast_404', 'module', '6.x', '6.x-1.x-dev', '', 'http://ftp.drupal.org/files/translations/6.x/fast_404/fast_404-6.x-1.x-dev.%language.po', 1),
-('filefield', 'module', '6.x', '6.x-3.13', '', 'http://ftp.drupal.org/files/translations/6.x/filefield/filefield-6.x-3.13.%language.po', 1),
+('fast_404', 'module', '6.x', '6.x-1.6', '', 'http://ftp.drupal.org/files/translations/6.x/fast_404/fast_404-6.x-1.6.%language.po', 1),
+('filefield', 'module', '6.x', '6.x-3.14', '', 'http://ftp.drupal.org/files/translations/6.x/filefield/filefield-6.x-3.14.%language.po', 1),
 ('globalredirect', 'module', '6.x', '6.x-1.5', '', 'http://ftp.drupal.org/files/translations/6.x/globalredirect/globalredirect-6.x-1.5.%language.po', 1),
 ('imageapi', 'module', '6.x', '6.x-1.10', '', 'http://ftp.drupal.org/files/translations/6.x/imageapi/imageapi-6.x-1.10.%language.po', 1),
 ('imagecache', 'module', '6.x', '6.x-2.0-rc1', '', 'http://ftp.drupal.org/files/translations/6.x/imagecache/imagecache-6.x-2.0-rc1.%language.po', 1),
@@ -647,7 +587,7 @@ INSERT INTO `l10n_update_project` (`name`, `project_type`, `core`, `version`, `l
 ('virdini', 'module', '6.x', '', '', 'http://ftp.drupal.org/files/translations/6.x/virdini/virdini-.%language.po', 1),
 ('wysiwyg', 'module', '6.x', '6.x-2.4', '', 'http://ftp.drupal.org/files/translations/6.x/wysiwyg/wysiwyg-6.x-2.4.%language.po', 1),
 ('colorbox', 'module', '6.x', '6.x-1.4', '', 'http://ftp.drupal.org/files/translations/6.x/colorbox/colorbox-6.x-1.4.%language.po', 1),
-('google_analytics', 'module', '6.x', '6.x-4.1', '', 'http://ftp.drupal.org/files/translations/6.x/google_analytics/google_analytics-6.x-4.1.%language.po', 1),
+('google_analytics', 'module', '6.x', '6.x-4.3', '', 'http://ftp.drupal.org/files/translations/6.x/google_analytics/google_analytics-6.x-4.3.%language.po', 1),
 ('jquery_ui', 'module', '6.x', '6.x-1.5', '', 'http://ftp.drupal.org/files/translations/6.x/jquery_ui/jquery_ui-6.x-1.5.%language.po', 1),
 ('page_title', 'module', '6.x', '6.x-2.7', '', 'http://ftp.drupal.org/files/translations/6.x/page_title/page_title-6.x-2.7.%language.po', 1),
 ('poormanscron', 'module', '6.x', '6.x-2.2', '', 'http://ftp.drupal.org/files/translations/6.x/poormanscron/poormanscron-6.x-2.2.%language.po', 1),
@@ -674,9 +614,7 @@ CREATE TABLE IF NOT EXISTS `languages` (
   `domain` varchar(128) NOT NULL DEFAULT '',
   `prefix` varchar(128) NOT NULL DEFAULT '',
   `weight` int(11) NOT NULL DEFAULT '0',
-  `javascript` varchar(32) NOT NULL DEFAULT '',
-  PRIMARY KEY (`language`),
-  KEY `list` (`weight`,`name`)
+  `javascript` varchar(32) NOT NULL DEFAULT ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -693,14 +631,12 @@ INSERT INTO `languages` (`language`, `name`, `native`, `direction`, `enabled`, `
 --
 
 CREATE TABLE IF NOT EXISTS `locales_source` (
-  `lid` int(11) NOT NULL AUTO_INCREMENT,
+  `lid` int(11) NOT NULL,
   `location` varchar(255) NOT NULL DEFAULT '',
   `textgroup` varchar(255) NOT NULL DEFAULT 'default',
   `source` blob NOT NULL,
-  `version` varchar(20) NOT NULL DEFAULT 'none',
-  PRIMARY KEY (`lid`),
-  KEY `source` (`source`(30))
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38 ;
+  `version` varchar(20) NOT NULL DEFAULT 'none'
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `locales_source`
@@ -757,11 +693,7 @@ CREATE TABLE IF NOT EXISTS `locales_target` (
   `language` varchar(12) NOT NULL DEFAULT '',
   `plid` int(11) NOT NULL DEFAULT '0',
   `plural` int(11) NOT NULL DEFAULT '0',
-  `l10n_status` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`language`,`lid`,`plural`),
-  KEY `lid` (`lid`),
-  KEY `plid` (`plid`),
-  KEY `plural` (`plural`)
+  `l10n_status` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -773,8 +705,7 @@ CREATE TABLE IF NOT EXISTS `locales_target` (
 CREATE TABLE IF NOT EXISTS `menu_custom` (
   `menu_name` varchar(32) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `description` text,
-  PRIMARY KEY (`menu_name`)
+  `description` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -796,7 +727,7 @@ INSERT INTO `menu_custom` (`menu_name`, `title`, `description`) VALUES
 
 CREATE TABLE IF NOT EXISTS `menu_links` (
   `menu_name` varchar(32) NOT NULL DEFAULT '',
-  `mlid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mlid` int(10) unsigned NOT NULL,
   `plid` int(10) unsigned NOT NULL DEFAULT '0',
   `link_path` varchar(255) NOT NULL DEFAULT '',
   `router_path` varchar(255) NOT NULL DEFAULT '',
@@ -819,13 +750,8 @@ CREATE TABLE IF NOT EXISTS `menu_links` (
   `p7` int(10) unsigned NOT NULL DEFAULT '0',
   `p8` int(10) unsigned NOT NULL DEFAULT '0',
   `p9` int(10) unsigned NOT NULL DEFAULT '0',
-  `updated` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`mlid`),
-  KEY `path_menu` (`link_path`(128),`menu_name`),
-  KEY `menu_plid_expand_child` (`menu_name`,`plid`,`expanded`,`has_children`),
-  KEY `menu_parents` (`menu_name`,`p1`,`p2`,`p3`,`p4`,`p5`,`p6`,`p7`,`p8`,`p9`),
-  KEY `router_path` (`router_path`(128))
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=282 ;
+  `updated` smallint(6) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM AUTO_INCREMENT=284 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `menu_links`
@@ -1019,11 +945,7 @@ CREATE TABLE IF NOT EXISTS `menu_router` (
   `description` text NOT NULL,
   `position` varchar(255) NOT NULL DEFAULT '',
   `weight` int(11) NOT NULL DEFAULT '0',
-  `file` mediumtext,
-  PRIMARY KEY (`path`),
-  KEY `fit` (`fit`),
-  KEY `tab_parent` (`tab_parent`),
-  KEY `tab_root_weight_title` (`tab_root`(64),`weight`,`title`)
+  `file` mediumtext
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -1211,21 +1133,21 @@ INSERT INTO `menu_router` (`path`, `load_functions`, `to_arg_functions`, `access
 ('admin/content/nodewords/meta-tags/default', '', '', 'user_access', 'a:1:{i:0;s:20:"administer meta tags";}', 'drupal_get_form', 'a:1:{i:0;s:19:"nodewords_tags_form";}', 31, 5, 'admin/content/nodewords/meta-tags', 'admin/content/nodewords', 'Default values', 't', '', 136, '', '', '', -10, 'sites/all/modules/nodewords/nodewords.admin.inc'),
 ('admin/build/modules/list/confirm', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:14:"system_modules";}', 31, 5, '', 'admin/build/modules/list/confirm', 'List', 't', '', 4, '', '', '', 0, 'modules/system/system.admin.inc'),
 ('admin/build/modules/uninstall/confirm', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:24:"system_modules_uninstall";}', 31, 5, '', 'admin/build/modules/uninstall/confirm', 'Uninstall', 't', '', 4, '', '', '', 0, 'modules/system/system.admin.inc'),
-('admin/build/themes/settings/bluemarine', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:33:"themes/bluemarine/bluemarine.info";s:4:"name";s:10:"bluemarine";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:10:"Bluemarine";s:11:"description";s:66:"Table-based multi-column theme with a marine and ash color scheme.";s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/bluemarine/script.js";}s:10:"screenshot";s:32:"themes/bluemarine/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:6:"engine";s:11:"phptemplate";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:10:"bluemarine";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Bluemarine', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
-('admin/build/themes/settings/chameleon', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":11:{s:8:"filename";s:31:"themes/chameleon/chameleon.info";s:4:"name";s:9:"chameleon";s:4:"type";s:5:"theme";s:5:"owner";s:32:"themes/chameleon/chameleon.theme";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:12:{s:4:"name";s:9:"Chameleon";s:11:"description";s:42:"Minimalist tabled theme with light colors.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:8:"features";a:4:{i:0;s:4:"logo";i:1;s:7:"favicon";i:2;s:4:"name";i:3;s:6:"slogan";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"scripts";a:1:{s:9:"script.js";s:26:"themes/chameleon/script.js";}s:10:"screenshot";s:31:"themes/chameleon/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:9:"chameleon";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Chameleon', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
+('admin/build/themes/settings/bluemarine', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:33:"themes/bluemarine/bluemarine.info";s:4:"name";s:10:"bluemarine";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:10:"Bluemarine";s:11:"description";s:66:"Table-based multi-column theme with a marine and ash color scheme.";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/bluemarine/script.js";}s:10:"screenshot";s:32:"themes/bluemarine/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:6:"engine";s:11:"phptemplate";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:10:"bluemarine";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Bluemarine', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
+('admin/build/themes/settings/chameleon', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":11:{s:8:"filename";s:31:"themes/chameleon/chameleon.info";s:4:"name";s:9:"chameleon";s:4:"type";s:5:"theme";s:5:"owner";s:32:"themes/chameleon/chameleon.theme";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:12:{s:4:"name";s:9:"Chameleon";s:11:"description";s:42:"Minimalist tabled theme with light colors.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:8:"features";a:4:{i:0;s:4:"logo";i:1;s:7:"favicon";i:2;s:4:"name";i:3;s:6:"slogan";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"scripts";a:1:{s:9:"script.js";s:26:"themes/chameleon/script.js";}s:10:"screenshot";s:31:"themes/chameleon/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:9:"chameleon";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Chameleon', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
 ('admin/build/themes/settings/cube', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":13:{s:8:"filename";s:37:"sites/all/themes/rubik/cube/cube.info";s:4:"name";s:4:"cube";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:16:{s:4:"name";s:4:"Cube";s:11:"description";s:44:"Spaces-aware front-end theme based on Rubik.";s:10:"base theme";s:5:"rubik";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:1:{s:6:"screen";a:1:{s:9:"style.css";s:37:"sites/all/themes/rubik/cube/style.css";}}s:7:"regions";a:4:{s:6:"header";s:6:"Header";s:7:"content";s:7:"Content";s:4:"left";s:4:"Left";s:5:"right";s:5:"Right";}s:9:"designkit";a:2:{s:5:"color";a:1:{s:10:"background";s:7:"#0088cc";}s:4:"logo";a:2:{s:4:"logo";s:23:"imagecache_scale:200x50";s:5:"print";s:24:"imagecache_scale:600x150";}}s:7:"layouts";a:5:{s:7:"default";a:3:{s:4:"name";s:7:"Default";s:11:"description";s:23:"Simple one column page.";s:8:"template";s:4:"page";}s:7:"sidebar";a:5:{s:4:"name";s:7:"Sidebar";s:11:"description";s:26:"Main content with sidebar.";s:10:"stylesheet";s:18:"layout-sidebar.css";s:8:"template";s:14:"layout-sidebar";s:7:"regions";a:2:{i:0;s:7:"content";i:1;s:5:"right";}}s:5:"split";a:5:{s:4:"name";s:5:"Split";s:11:"description";s:12:"50/50 split.";s:10:"stylesheet";s:16:"layout-split.css";s:8:"template";s:14:"layout-sidebar";s:7:"regions";a:2:{i:0;s:7:"content";i:1;s:5:"right";}}s:7:"columns";a:5:{s:4:"name";s:7:"Columns";s:11:"description";s:20:"Three column layout.";s:10:"stylesheet";s:18:"layout-columns.css";s:8:"template";s:14:"layout-columns";s:7:"regions";a:4:{i:0;s:6:"header";i:1;s:7:"content";i:2;s:4:"left";i:3;s:5:"right";}}s:6:"offset";a:5:{s:4:"name";s:15:"Offset sidebars";s:11:"description";s:38:"Main content with two offset sidebars.";s:10:"stylesheet";s:17:"layout-offset.css";s:8:"template";s:13:"layout-offset";s:7:"regions";a:4:{i:0;s:6:"header";i:1;s:7:"content";i:2;s:4:"left";i:3;s:5:"right";}}}s:7:"version";s:13:"6.x-3.0-beta3";s:7:"project";s:5:"rubik";s:9:"datestamp";s:10:"1329952845";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:37:"sites/all/themes/rubik/cube/script.js";}s:10:"screenshot";s:42:"sites/all/themes/rubik/cube/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:6:"screen";a:1:{s:9:"style.css";s:37:"sites/all/themes/rubik/cube/style.css";}}s:6:"engine";s:11:"phptemplate";s:10:"base_theme";s:5:"rubik";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:4:"cube";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Cube', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
-('admin/build/themes/settings/garland', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:27:"themes/garland/garland.info";s:4:"name";s:7:"garland";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:7:"Garland";s:11:"description";s:66:"Tableless, recolorable, multi-column, fluid width theme (default).";s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:24:"themes/garland/script.js";}s:10:"screenshot";s:29:"themes/garland/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:6:"engine";s:11:"phptemplate";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:7:"garland";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Garland', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
-('admin/build/themes/settings/marvin', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:35:"themes/chameleon/marvin/marvin.info";s:4:"name";s:6:"marvin";s:4:"type";s:5:"theme";s:5:"owner";s:0:"";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:6:"Marvin";s:11:"description";s:31:"Boxy tabled theme in all grays.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:10:"base theme";s:9:"chameleon";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/chameleon/marvin/script.js";}s:10:"screenshot";s:38:"themes/chameleon/marvin/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:10:"base_theme";s:9:"chameleon";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:6:"marvin";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Marvin', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
-('admin/build/themes/settings/minnelli', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":13:{s:8:"filename";s:37:"themes/garland/minnelli/minnelli.info";s:4:"name";s:8:"minnelli";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:14:{s:4:"name";s:8:"Minnelli";s:11:"description";s:56:"Tableless, recolorable, multi-column, fixed width theme.";s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:10:"base theme";s:7:"garland";s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/garland/minnelli/script.js";}s:10:"screenshot";s:38:"themes/garland/minnelli/screenshot.png";s:3:"php";s:5:"4.3.5";s:6:"engine";s:11:"phptemplate";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:6:"engine";s:11:"phptemplate";s:10:"base_theme";s:7:"garland";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:8:"minnelli";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Minnelli', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
-('admin/build/themes/settings/pushbutton', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:33:"themes/pushbutton/pushbutton.info";s:4:"name";s:10:"pushbutton";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:10:"Pushbutton";s:11:"description";s:52:"Tabled, multi-column theme in blue and orange tones.";s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/pushbutton/script.js";}s:10:"screenshot";s:32:"themes/pushbutton/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:6:"engine";s:11:"phptemplate";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:10:"pushbutton";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Pushbutton', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
+('admin/build/themes/settings/garland', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:27:"themes/garland/garland.info";s:4:"name";s:7:"garland";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:7:"Garland";s:11:"description";s:66:"Tableless, recolorable, multi-column, fluid width theme (default).";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:24:"themes/garland/script.js";}s:10:"screenshot";s:29:"themes/garland/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:6:"engine";s:11:"phptemplate";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:7:"garland";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Garland', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
+('admin/build/themes/settings/marvin', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:35:"themes/chameleon/marvin/marvin.info";s:4:"name";s:6:"marvin";s:4:"type";s:5:"theme";s:5:"owner";s:0:"";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:6:"Marvin";s:11:"description";s:31:"Boxy tabled theme in all grays.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:10:"base theme";s:9:"chameleon";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/chameleon/marvin/script.js";}s:10:"screenshot";s:38:"themes/chameleon/marvin/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:10:"base_theme";s:9:"chameleon";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:6:"marvin";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Marvin', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
+('admin/build/themes/settings/minnelli', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":13:{s:8:"filename";s:37:"themes/garland/minnelli/minnelli.info";s:4:"name";s:8:"minnelli";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:14:{s:4:"name";s:8:"Minnelli";s:11:"description";s:56:"Tableless, recolorable, multi-column, fixed width theme.";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:10:"base theme";s:7:"garland";s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/garland/minnelli/script.js";}s:10:"screenshot";s:38:"themes/garland/minnelli/screenshot.png";s:3:"php";s:5:"4.3.5";s:6:"engine";s:11:"phptemplate";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:6:"engine";s:11:"phptemplate";s:10:"base_theme";s:7:"garland";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:8:"minnelli";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Minnelli', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
+('admin/build/themes/settings/pushbutton', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:33:"themes/pushbutton/pushbutton.info";s:4:"name";s:10:"pushbutton";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:10:"Pushbutton";s:11:"description";s:52:"Tabled, multi-column theme in blue and orange tones.";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/pushbutton/script.js";}s:10:"screenshot";s:32:"themes/pushbutton/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:6:"engine";s:11:"phptemplate";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:10:"pushbutton";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Pushbutton', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
 ('admin/build/themes/settings/rubik', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":14:{s:8:"filename";s:33:"sites/all/themes/rubik/rubik.info";s:4:"name";s:5:"rubik";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:14:{s:4:"name";s:5:"Rubik";s:11:"description";s:18:"Clean admin theme.";s:10:"base theme";s:3:"tao";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"scripts";a:1:{s:11:"js/rubik.js";s:34:"sites/all/themes/rubik/js/rubik.js";}s:11:"stylesheets";a:1:{s:6:"screen";a:3:{s:8:"core.css";s:31:"sites/all/themes/rubik/core.css";s:9:"icons.css";s:32:"sites/all/themes/rubik/icons.css";s:9:"style.css";s:32:"sites/all/themes/rubik/style.css";}}s:7:"version";s:13:"6.x-3.0-beta3";s:7:"project";s:5:"rubik";s:9:"datestamp";s:10:"1329952845";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:10:"screenshot";s:37:"sites/all/themes/rubik/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:6:"screen";a:3:{s:8:"core.css";s:31:"sites/all/themes/rubik/core.css";s:9:"icons.css";s:32:"sites/all/themes/rubik/icons.css";s:9:"style.css";s:32:"sites/all/themes/rubik/style.css";}}s:7:"scripts";a:1:{s:11:"js/rubik.js";s:34:"sites/all/themes/rubik/js/rubik.js";}s:6:"engine";s:11:"phptemplate";s:10:"base_theme";s:3:"tao";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:5:"rubik";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Rubik', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
 ('admin/build/themes/settings/tao', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":13:{s:8:"filename";s:29:"sites/all/themes/tao/tao.info";s:4:"name";s:3:"tao";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"core";s:3:"6.x";s:11:"description";s:149:"Tao is a base theme that is all about going with the flow. It takes care of key reset and utility tasks so that sub-themes can get on with their job.";s:6:"engine";s:11:"phptemplate";s:4:"name";s:3:"Tao";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:7:"scripts";a:1:{s:9:"js/tao.js";s:30:"sites/all/themes/tao/js/tao.js";}s:11:"stylesheets";a:3:{s:6:"screen";a:3:{s:9:"reset.css";s:30:"sites/all/themes/tao/reset.css";s:10:"drupal.css";s:31:"sites/all/themes/tao/drupal.css";s:8:"base.css";s:29:"sites/all/themes/tao/base.css";}s:5:"print";a:3:{s:9:"reset.css";s:30:"sites/all/themes/tao/reset.css";s:8:"base.css";s:29:"sites/all/themes/tao/base.css";s:9:"print.css";s:30:"sites/all/themes/tao/print.css";}s:3:"all";a:20:{s:9:"admin.css";s:30:"sites/all/themes/tao/admin.css";s:9:"block.css";s:30:"sites/all/themes/tao/block.css";s:8:"book.css";s:29:"sites/all/themes/tao/book.css";s:11:"comment.css";s:32:"sites/all/themes/tao/comment.css";s:9:"dblog.css";s:30:"sites/all/themes/tao/dblog.css";s:12:"defaults.css";s:33:"sites/all/themes/tao/defaults.css";s:9:"forum.css";s:30:"sites/all/themes/tao/forum.css";s:8:"help.css";s:29:"sites/all/themes/tao/help.css";s:15:"maintenance.css";s:36:"sites/all/themes/tao/maintenance.css";s:8:"node.css";s:29:"sites/all/themes/tao/node.css";s:10:"openid.css";s:31:"sites/all/themes/tao/openid.css";s:8:"poll.css";s:29:"sites/all/themes/tao/poll.css";s:11:"profile.css";s:32:"sites/all/themes/tao/profile.css";s:10:"search.css";s:31:"sites/all/themes/tao/search.css";s:10:"system.css";s:31:"sites/all/themes/tao/system.css";s:16:"system-menus.css";s:37:"sites/all/themes/tao/system-menus.css";s:12:"taxonomy.css";s:33:"sites/all/themes/tao/taxonomy.css";s:11:"tracker.css";s:32:"sites/all/themes/tao/tracker.css";s:10:"update.css";s:31:"sites/all/themes/tao/update.css";s:8:"user.css";s:29:"sites/all/themes/tao/user.css";}}s:7:"version";s:7:"6.x-3.3";s:7:"project";s:3:"tao";s:9:"datestamp";s:10:"1329952556";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:10:"screenshot";s:35:"sites/all/themes/tao/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:3:{s:6:"screen";a:3:{s:9:"reset.css";s:30:"sites/all/themes/tao/reset.css";s:10:"drupal.css";s:31:"sites/all/themes/tao/drupal.css";s:8:"base.css";s:29:"sites/all/themes/tao/base.css";}s:5:"print";a:3:{s:9:"reset.css";s:30:"sites/all/themes/tao/reset.css";s:8:"base.css";s:29:"sites/all/themes/tao/base.css";s:9:"print.css";s:30:"sites/all/themes/tao/print.css";}s:3:"all";a:20:{s:9:"admin.css";s:30:"sites/all/themes/tao/admin.css";s:9:"block.css";s:30:"sites/all/themes/tao/block.css";s:8:"book.css";s:29:"sites/all/themes/tao/book.css";s:11:"comment.css";s:32:"sites/all/themes/tao/comment.css";s:9:"dblog.css";s:30:"sites/all/themes/tao/dblog.css";s:12:"defaults.css";s:33:"sites/all/themes/tao/defaults.css";s:9:"forum.css";s:30:"sites/all/themes/tao/forum.css";s:8:"help.css";s:29:"sites/all/themes/tao/help.css";s:15:"maintenance.css";s:36:"sites/all/themes/tao/maintenance.css";s:8:"node.css";s:29:"sites/all/themes/tao/node.css";s:10:"openid.css";s:31:"sites/all/themes/tao/openid.css";s:8:"poll.css";s:29:"sites/all/themes/tao/poll.css";s:11:"profile.css";s:32:"sites/all/themes/tao/profile.css";s:10:"search.css";s:31:"sites/all/themes/tao/search.css";s:10:"system.css";s:31:"sites/all/themes/tao/system.css";s:16:"system-menus.css";s:37:"sites/all/themes/tao/system-menus.css";s:12:"taxonomy.css";s:33:"sites/all/themes/tao/taxonomy.css";s:11:"tracker.css";s:32:"sites/all/themes/tao/tracker.css";s:10:"update.css";s:31:"sites/all/themes/tao/update.css";s:8:"user.css";s:29:"sites/all/themes/tao/user.css";}}s:7:"scripts";a:1:{s:9:"js/tao.js";s:30:"sites/all/themes/tao/js/tao.js";}s:6:"engine";s:11:"phptemplate";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:3:"tao";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Tao', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
 ('admin/build/themes/settings/virdini', '', '', '_system_themes_access', 'a:1:{i:0;O:8:"stdClass":13:{s:8:"filename";s:37:"sites/all/themes/virdini/virdini.info";s:4:"name";s:7:"virdini";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"1";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:11:{s:4:"name";s:11:"Virdini.com";s:11:"description";s:45:"Theme designed by Virdini.сom for this site.";s:4:"core";s:3:"6.x";s:7:"project";s:7:"virdini";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:13:"css/style.css";s:38:"sites/all/themes/virdini/css/style.css";s:19:"css/forms-style.css";s:44:"sites/all/themes/virdini/css/forms-style.css";}}s:7:"scripts";a:1:{s:12:"js/script.js";s:37:"sites/all/themes/virdini/js/script.js";}s:7:"regions";a:8:{s:4:"left";s:11:"Left region";s:9:"main_menu";s:9:"Main menu";s:5:"right";s:12:"Right region";s:7:"content";s:7:"Content";s:6:"header";s:13:"Header region";s:6:"footer";s:13:"Footer region";s:4:"lang";s:9:"Languages";s:6:"search";s:6:"Search";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:10:"screenshot";s:39:"sites/all/themes/virdini/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:13:"css/style.css";s:38:"sites/all/themes/virdini/css/style.css";s:19:"css/forms-style.css";s:44:"sites/all/themes/virdini/css/forms-style.css";}}s:7:"scripts";a:1:{s:12:"js/script.js";s:37:"sites/all/themes/virdini/js/script.js";}s:6:"engine";s:11:"phptemplate";}}', 'drupal_get_form', 'a:2:{i:0;s:21:"system_theme_settings";i:1;s:7:"virdini";}', 31, 5, 'admin/build/themes/settings', 'admin/build/themes', 'Virdini.com', 't', '', 128, '', '', '', 0, 'modules/system/system.admin.inc'),
 ('filefield/ahah/%/%/%', 'a:3:{i:2;N;i:3;N;i:4;N;}', '', 'filefield_edit_access', 'a:2:{i:0;i:2;i:1;i:3;}', 'filefield_js', 'a:3:{i:0;i:2;i:1;i:3;i:2;i:4;}', 24, 5, '', 'filefield/ahah/%/%/%', '', 't', '', 4, '', '', '', 0, ''),
 ('admin/settings/imageapi/config/imageapi_gd', '', '', 'user_access', 'a:1:{i:0;s:19:"administer imageapi";}', 'drupal_get_form', 'a:1:{i:0;s:25:"imageapi_gd_settings_form";}', 31, 5, 'admin/settings/imageapi/config', 'admin/settings/imageapi', '@name', 't', 'a:1:{s:5:"@name";s:12:"ImageAPI GD2";}', 136, '', '', '', 0, ''),
 ('admin/build/menu-customize/%/add', 'a:1:{i:3;s:9:"menu_load";}', '', 'user_access', 'a:1:{i:0;s:15:"administer menu";}', 'drupal_get_form', 'a:4:{i:0;s:14:"menu_edit_item";i:1;s:3:"add";i:2;N;i:3;i:3;}', 29, 5, 'admin/build/menu-customize/%', 'admin/build/menu-customize/%', 'Add item', 't', '', 128, '', '', '', 0, 'modules/menu/menu.admin.inc'),
-('admin/build/block/list/bluemarine', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:33:"themes/bluemarine/bluemarine.info";s:4:"name";s:10:"bluemarine";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:10:"Bluemarine";s:11:"description";s:66:"Table-based multi-column theme with a marine and ash color scheme.";s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/bluemarine/script.js";}s:10:"screenshot";s:32:"themes/bluemarine/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:6:"engine";s:11:"phptemplate";}}', 'block_admin_display', 'a:1:{i:0;s:10:"bluemarine";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Bluemarine', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
-('admin/build/block/list/chameleon', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":11:{s:8:"filename";s:31:"themes/chameleon/chameleon.info";s:4:"name";s:9:"chameleon";s:4:"type";s:5:"theme";s:5:"owner";s:32:"themes/chameleon/chameleon.theme";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:12:{s:4:"name";s:9:"Chameleon";s:11:"description";s:42:"Minimalist tabled theme with light colors.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:8:"features";a:4:{i:0;s:4:"logo";i:1;s:7:"favicon";i:2;s:4:"name";i:3;s:6:"slogan";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"scripts";a:1:{s:9:"script.js";s:26:"themes/chameleon/script.js";}s:10:"screenshot";s:31:"themes/chameleon/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}}}', 'block_admin_display', 'a:1:{i:0;s:9:"chameleon";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Chameleon', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
+('admin/build/block/list/bluemarine', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:33:"themes/bluemarine/bluemarine.info";s:4:"name";s:10:"bluemarine";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:10:"Bluemarine";s:11:"description";s:66:"Table-based multi-column theme with a marine and ash color scheme.";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/bluemarine/script.js";}s:10:"screenshot";s:32:"themes/bluemarine/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:6:"engine";s:11:"phptemplate";}}', 'block_admin_display', 'a:1:{i:0;s:10:"bluemarine";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Bluemarine', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
+('admin/build/block/list/chameleon', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":11:{s:8:"filename";s:31:"themes/chameleon/chameleon.info";s:4:"name";s:9:"chameleon";s:4:"type";s:5:"theme";s:5:"owner";s:32:"themes/chameleon/chameleon.theme";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:12:{s:4:"name";s:9:"Chameleon";s:11:"description";s:42:"Minimalist tabled theme with light colors.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:8:"features";a:4:{i:0;s:4:"logo";i:1;s:7:"favicon";i:2;s:4:"name";i:3;s:6:"slogan";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"scripts";a:1:{s:9:"script.js";s:26:"themes/chameleon/script.js";}s:10:"screenshot";s:31:"themes/chameleon/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}}}', 'block_admin_display', 'a:1:{i:0;s:9:"chameleon";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Chameleon', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
 ('admin/settings/filters/%/configure', 'a:1:{i:3;s:18:"filter_format_load";}', '', 'user_access', 'a:1:{i:0;s:18:"administer filters";}', 'filter_admin_configure_page', 'a:1:{i:0;i:3;}', 29, 5, 'admin/settings/filters/%', 'admin/settings/filters/%', 'Configure', 't', '', 128, '', '', '', 1, 'modules/filter/filter.admin.inc'),
 ('admin/settings/language/delete/%', 'a:1:{i:4;N;}', '', 'user_access', 'a:1:{i:0;s:20:"administer languages";}', 'locale_inc_callback', 'a:3:{i:0;s:15:"drupal_get_form";i:1;s:28:"locale_languages_delete_form";i:2;i:4;}', 30, 5, '', 'admin/settings/language/delete/%', 'Confirm', 't', '', 4, '', '', '', 0, ''),
 ('admin/build/block/list/cube', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":13:{s:8:"filename";s:37:"sites/all/themes/rubik/cube/cube.info";s:4:"name";s:4:"cube";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:16:{s:4:"name";s:4:"Cube";s:11:"description";s:44:"Spaces-aware front-end theme based on Rubik.";s:10:"base theme";s:5:"rubik";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:1:{s:6:"screen";a:1:{s:9:"style.css";s:37:"sites/all/themes/rubik/cube/style.css";}}s:7:"regions";a:4:{s:6:"header";s:6:"Header";s:7:"content";s:7:"Content";s:4:"left";s:4:"Left";s:5:"right";s:5:"Right";}s:9:"designkit";a:2:{s:5:"color";a:1:{s:10:"background";s:7:"#0088cc";}s:4:"logo";a:2:{s:4:"logo";s:23:"imagecache_scale:200x50";s:5:"print";s:24:"imagecache_scale:600x150";}}s:7:"layouts";a:5:{s:7:"default";a:3:{s:4:"name";s:7:"Default";s:11:"description";s:23:"Simple one column page.";s:8:"template";s:4:"page";}s:7:"sidebar";a:5:{s:4:"name";s:7:"Sidebar";s:11:"description";s:26:"Main content with sidebar.";s:10:"stylesheet";s:18:"layout-sidebar.css";s:8:"template";s:14:"layout-sidebar";s:7:"regions";a:2:{i:0;s:7:"content";i:1;s:5:"right";}}s:5:"split";a:5:{s:4:"name";s:5:"Split";s:11:"description";s:12:"50/50 split.";s:10:"stylesheet";s:16:"layout-split.css";s:8:"template";s:14:"layout-sidebar";s:7:"regions";a:2:{i:0;s:7:"content";i:1;s:5:"right";}}s:7:"columns";a:5:{s:4:"name";s:7:"Columns";s:11:"description";s:20:"Three column layout.";s:10:"stylesheet";s:18:"layout-columns.css";s:8:"template";s:14:"layout-columns";s:7:"regions";a:4:{i:0;s:6:"header";i:1;s:7:"content";i:2;s:4:"left";i:3;s:5:"right";}}s:6:"offset";a:5:{s:4:"name";s:15:"Offset sidebars";s:11:"description";s:38:"Main content with two offset sidebars.";s:10:"stylesheet";s:17:"layout-offset.css";s:8:"template";s:13:"layout-offset";s:7:"regions";a:4:{i:0;s:6:"header";i:1;s:7:"content";i:2;s:4:"left";i:3;s:5:"right";}}}s:7:"version";s:13:"6.x-3.0-beta3";s:7:"project";s:5:"rubik";s:9:"datestamp";s:10:"1329952845";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:37:"sites/all/themes/rubik/cube/script.js";}s:10:"screenshot";s:42:"sites/all/themes/rubik/cube/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:6:"screen";a:1:{s:9:"style.css";s:37:"sites/all/themes/rubik/cube/style.css";}}s:6:"engine";s:11:"phptemplate";s:10:"base_theme";s:5:"rubik";}}', 'block_admin_display', 'a:1:{i:0;s:4:"cube";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Cube', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
@@ -1240,13 +1162,13 @@ INSERT INTO `menu_router` (`path`, `load_functions`, `to_arg_functions`, `access
 ('admin/content/nodewords/meta-tags/errorpage_403', '', '', 'user_access', 'a:1:{i:0;s:20:"administer meta tags";}', 'drupal_get_form', 'a:3:{i:0;s:19:"nodewords_tags_form";i:1;s:1:"2";i:2;s:3:"403";}', 31, 5, 'admin/content/nodewords/meta-tags', 'admin/content/nodewords', 'Error 403 page', 't', '', 128, '', '', '', -7, 'sites/all/modules/nodewords/nodewords.admin.inc'),
 ('admin/content/nodewords/meta-tags/errorpage_404', '', '', 'user_access', 'a:1:{i:0;s:20:"administer meta tags";}', 'drupal_get_form', 'a:3:{i:0;s:19:"nodewords_tags_form";i:1;s:1:"2";i:2;s:3:"404";}', 31, 5, 'admin/content/nodewords/meta-tags', 'admin/content/nodewords', 'Error 404 page', 't', '', 128, '', '', '', -6, 'sites/all/modules/nodewords/nodewords.admin.inc'),
 ('admin/content/nodewords/meta-tags/frontpage', '', '', 'user_access', 'a:1:{i:0;s:20:"administer meta tags";}', 'drupal_get_form', 'a:2:{i:0;s:19:"nodewords_tags_form";i:1;s:1:"3";}', 31, 5, 'admin/content/nodewords/meta-tags', 'admin/content/nodewords', 'Front page', 't', '', 128, '', '', '', -9, 'sites/all/modules/nodewords/nodewords.admin.inc'),
-('admin/build/block/list/garland', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:27:"themes/garland/garland.info";s:4:"name";s:7:"garland";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:7:"Garland";s:11:"description";s:66:"Tableless, recolorable, multi-column, fluid width theme (default).";s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:24:"themes/garland/script.js";}s:10:"screenshot";s:29:"themes/garland/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:6:"engine";s:11:"phptemplate";}}', 'block_admin_display', 'a:1:{i:0;s:7:"garland";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Garland', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
+('admin/build/block/list/garland', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:27:"themes/garland/garland.info";s:4:"name";s:7:"garland";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:7:"Garland";s:11:"description";s:66:"Tableless, recolorable, multi-column, fluid width theme (default).";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:24:"themes/garland/script.js";}s:10:"screenshot";s:29:"themes/garland/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:6:"engine";s:11:"phptemplate";}}', 'block_admin_display', 'a:1:{i:0;s:7:"garland";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Garland', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
 ('admin/build/block/list/js', '', '', 'user_access', 'a:1:{i:0;s:17:"administer blocks";}', 'block_admin_display_js', 'a:0:{}', 31, 5, '', 'admin/build/block/list/js', 'JavaScript List Form', 't', '', 4, '', '', '', 0, 'modules/block/block.admin.inc'),
 ('admin/content/node-type/page/fields', '', '', 'user_access', 'a:1:{i:0;s:24:"administer content types";}', 'drupal_get_form', 'a:2:{i:0;s:27:"content_field_overview_form";i:1;s:4:"page";}', 31, 5, 'admin/content/node-type/page', 'admin/content/node-type/page', 'Manage fields', 't', '', 128, '', '', '', 1, 'sites/all/modules/cck/includes/content.admin.inc'),
 ('admin/content/node-type/page/form', '', '', 'user_access', 'a:1:{i:0;s:24:"administer content types";}', 'drupal_get_form', 'a:3:{i:0;s:31:"nodeformcols_configuration_form";i:1;s:4:"page";i:2;i:5;}', 31, 5, 'admin/content/node-type/page', 'admin/content/node-type/page', 'Manage form', 't', '', 128, '', '', '', 3, 'sites/all/modules/nodeformcols/nodeformcols.admin.inc'),
-('admin/build/block/list/marvin', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:35:"themes/chameleon/marvin/marvin.info";s:4:"name";s:6:"marvin";s:4:"type";s:5:"theme";s:5:"owner";s:0:"";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:6:"Marvin";s:11:"description";s:31:"Boxy tabled theme in all grays.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:10:"base theme";s:9:"chameleon";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/chameleon/marvin/script.js";}s:10:"screenshot";s:38:"themes/chameleon/marvin/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:10:"base_theme";s:9:"chameleon";}}', 'block_admin_display', 'a:1:{i:0;s:6:"marvin";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Marvin', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
-('admin/build/block/list/minnelli', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":13:{s:8:"filename";s:37:"themes/garland/minnelli/minnelli.info";s:4:"name";s:8:"minnelli";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:14:{s:4:"name";s:8:"Minnelli";s:11:"description";s:56:"Tableless, recolorable, multi-column, fixed width theme.";s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:10:"base theme";s:7:"garland";s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/garland/minnelli/script.js";}s:10:"screenshot";s:38:"themes/garland/minnelli/screenshot.png";s:3:"php";s:5:"4.3.5";s:6:"engine";s:11:"phptemplate";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:6:"engine";s:11:"phptemplate";s:10:"base_theme";s:7:"garland";}}', 'block_admin_display', 'a:1:{i:0;s:8:"minnelli";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Minnelli', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
-('admin/build/block/list/pushbutton', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:33:"themes/pushbutton/pushbutton.info";s:4:"name";s:10:"pushbutton";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:10:"Pushbutton";s:11:"description";s:52:"Tabled, multi-column theme in blue and orange tones.";s:7:"version";s:4:"6.34";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1416429457";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/pushbutton/script.js";}s:10:"screenshot";s:32:"themes/pushbutton/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:6:"engine";s:11:"phptemplate";}}', 'block_admin_display', 'a:1:{i:0;s:10:"pushbutton";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Pushbutton', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
+('admin/build/block/list/marvin', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:35:"themes/chameleon/marvin/marvin.info";s:4:"name";s:6:"marvin";s:4:"type";s:5:"theme";s:5:"owner";s:0:"";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:6:"Marvin";s:11:"description";s:31:"Boxy tabled theme in all grays.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:10:"base theme";s:9:"chameleon";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/chameleon/marvin/script.js";}s:10:"screenshot";s:38:"themes/chameleon/marvin/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:10:"base_theme";s:9:"chameleon";}}', 'block_admin_display', 'a:1:{i:0;s:6:"marvin";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Marvin', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
+('admin/build/block/list/minnelli', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":13:{s:8:"filename";s:37:"themes/garland/minnelli/minnelli.info";s:4:"name";s:8:"minnelli";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:14:{s:4:"name";s:8:"Minnelli";s:11:"description";s:56:"Tableless, recolorable, multi-column, fixed width theme.";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:10:"base theme";s:7:"garland";s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/garland/minnelli/script.js";}s:10:"screenshot";s:38:"themes/garland/minnelli/screenshot.png";s:3:"php";s:5:"4.3.5";s:6:"engine";s:11:"phptemplate";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:6:"engine";s:11:"phptemplate";s:10:"base_theme";s:7:"garland";}}', 'block_admin_display', 'a:1:{i:0;s:8:"minnelli";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Minnelli', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
+('admin/build/block/list/pushbutton', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":12:{s:8:"filename";s:33:"themes/pushbutton/pushbutton.info";s:4:"name";s:10:"pushbutton";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:13:{s:4:"name";s:10:"Pushbutton";s:11:"description";s:52:"Tabled, multi-column theme in blue and orange tones.";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/pushbutton/script.js";}s:10:"screenshot";s:32:"themes/pushbutton/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:6:"engine";s:11:"phptemplate";}}', 'block_admin_display', 'a:1:{i:0;s:10:"pushbutton";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Pushbutton', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
 ('admin/settings/filters/%/order', 'a:1:{i:3;s:18:"filter_format_load";}', '', 'user_access', 'a:1:{i:0;s:18:"administer filters";}', 'filter_admin_order_page', 'a:1:{i:0;i:3;}', 29, 5, 'admin/settings/filters/%', 'admin/settings/filters/%', 'Rearrange', 't', '', 128, '', '', '', 2, 'modules/filter/filter.admin.inc'),
 ('user/reset/%/%/%', 'a:3:{i:2;N;i:3;N;i:4;N;}', '', '1', 'a:0:{}', 'drupal_get_form', 'a:4:{i:0;s:15:"user_pass_reset";i:1;i:2;i:2;i:3;i:3;i:4;}', 24, 5, '', 'user/reset/%/%/%', 'Reset password', 't', '', 4, '', '', '', 0, 'modules/user/user.pages.inc'),
 ('admin/build/block/list/rubik', '', '', '_block_themes_access', 'a:1:{i:0;O:8:"stdClass":14:{s:8:"filename";s:33:"sites/all/themes/rubik/rubik.info";s:4:"name";s:5:"rubik";s:4:"type";s:5:"theme";s:5:"owner";s:45:"themes/engines/phptemplate/phptemplate.engine";s:6:"status";s:1:"0";s:8:"throttle";s:1:"0";s:9:"bootstrap";s:1:"0";s:14:"schema_version";s:2:"-1";s:6:"weight";s:1:"0";s:4:"info";a:14:{s:4:"name";s:5:"Rubik";s:11:"description";s:18:"Clean admin theme.";s:10:"base theme";s:3:"tao";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"scripts";a:1:{s:11:"js/rubik.js";s:34:"sites/all/themes/rubik/js/rubik.js";}s:11:"stylesheets";a:1:{s:6:"screen";a:3:{s:8:"core.css";s:31:"sites/all/themes/rubik/core.css";s:9:"icons.css";s:32:"sites/all/themes/rubik/icons.css";s:9:"style.css";s:32:"sites/all/themes/rubik/style.css";}}s:7:"version";s:13:"6.x-3.0-beta3";s:7:"project";s:5:"rubik";s:9:"datestamp";s:10:"1329952845";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:10:"screenshot";s:37:"sites/all/themes/rubik/screenshot.png";s:3:"php";s:5:"4.3.5";}s:11:"stylesheets";a:1:{s:6:"screen";a:3:{s:8:"core.css";s:31:"sites/all/themes/rubik/core.css";s:9:"icons.css";s:32:"sites/all/themes/rubik/icons.css";s:9:"style.css";s:32:"sites/all/themes/rubik/style.css";}}s:7:"scripts";a:1:{s:11:"js/rubik.js";s:34:"sites/all/themes/rubik/js/rubik.js";}s:6:"engine";s:11:"phptemplate";s:10:"base_theme";s:3:"tao";}}', 'block_admin_display', 'a:1:{i:0;s:5:"rubik";}', 31, 5, 'admin/build/block/list', 'admin/build/block', 'Rubik', 't', '', 128, '', '', '', 0, 'modules/block/block.admin.inc'),
@@ -1305,7 +1227,7 @@ INSERT INTO `menu_router` (`path`, `load_functions`, `to_arg_functions`, `access
 --
 
 CREATE TABLE IF NOT EXISTS `node` (
-  `nid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nid` int(10) unsigned NOT NULL,
   `vid` int(10) unsigned NOT NULL DEFAULT '0',
   `type` varchar(32) NOT NULL DEFAULT '',
   `language` varchar(12) NOT NULL DEFAULT '',
@@ -1319,20 +1241,8 @@ CREATE TABLE IF NOT EXISTS `node` (
   `moderate` int(11) NOT NULL DEFAULT '0',
   `sticky` int(11) NOT NULL DEFAULT '0',
   `tnid` int(10) unsigned NOT NULL DEFAULT '0',
-  `translate` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`nid`),
-  UNIQUE KEY `vid` (`vid`),
-  KEY `node_changed` (`changed`),
-  KEY `node_created` (`created`),
-  KEY `node_moderate` (`moderate`),
-  KEY `node_promote_status` (`promote`,`status`),
-  KEY `node_status_type` (`status`,`type`,`nid`),
-  KEY `node_title_type` (`title`,`type`(4)),
-  KEY `node_type` (`type`(4)),
-  KEY `uid` (`uid`),
-  KEY `tnid` (`tnid`),
-  KEY `translate` (`translate`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `translate` int(11) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1341,16 +1251,26 @@ CREATE TABLE IF NOT EXISTS `node` (
 --
 
 CREATE TABLE IF NOT EXISTS `nodewords` (
-  `mtid` int(11) NOT NULL AUTO_INCREMENT,
+  `mtid` int(11) NOT NULL,
   `type` smallint(5) unsigned NOT NULL DEFAULT '0',
   `id` int(10) unsigned NOT NULL DEFAULT '0',
   `name` varchar(128) NOT NULL DEFAULT '',
-  `content` longtext NOT NULL,
-  PRIMARY KEY (`mtid`),
-  UNIQUE KEY `nodewords_type_id_name` (`type`,`id`,`name`),
-  KEY `nodewords_name` (`name`(6)),
-  KEY `nodewords_type_id` (`type`,`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `content` longtext NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `nodewords`
+--
+
+INSERT INTO `nodewords` (`mtid`, `type`, `id`, `name`, `content`) VALUES
+(1, 8, 1, 'page_title', 'a:3:{s:5:"value";s:0:"";s:6:"append";i:1;s:7:"divider";s:3:" | ";}'),
+(2, 8, 1, 'description', 'a:1:{s:5:"value";s:0:"";}'),
+(3, 8, 1, 'abstract', 'a:1:{s:5:"value";s:0:"";}'),
+(4, 8, 1, 'keywords', 'a:1:{s:5:"value";s:0:"";}'),
+(5, 8, 1, 'copyright', 'a:1:{s:5:"value";s:0:"";}'),
+(6, 8, 1, 'canonical', 'a:1:{s:5:"value";s:0:"";}'),
+(7, 8, 1, 'revisit-after', 'a:1:{s:5:"value";s:0:"";}'),
+(8, 8, 1, 'robots', 'a:2:{s:5:"value";a:8:{s:5:"index";i:0;s:7:"noindex";i:0;s:6:"follow";i:0;s:8:"nofollow";i:0;s:9:"noarchive";i:0;s:5:"noodp";i:0;s:9:"nosnippet";i:0;s:6:"noydir";i:0;}s:11:"use_default";i:0;}');
 
 -- --------------------------------------------------------
 
@@ -1359,13 +1279,12 @@ CREATE TABLE IF NOT EXISTS `nodewords` (
 --
 
 CREATE TABLE IF NOT EXISTS `nodewords_custom` (
-  `pid` int(11) NOT NULL AUTO_INCREMENT,
+  `pid` int(11) NOT NULL,
   `name` varchar(128) NOT NULL DEFAULT '',
   `path` mediumtext NOT NULL,
   `weight` smallint(6) NOT NULL DEFAULT '0',
-  `enabled` smallint(5) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`pid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `enabled` smallint(5) unsigned NOT NULL DEFAULT '1'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1379,8 +1298,7 @@ CREATE TABLE IF NOT EXISTS `node_access` (
   `realm` varchar(255) NOT NULL DEFAULT '',
   `grant_view` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `grant_update` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `grant_delete` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`nid`,`gid`,`realm`)
+  `grant_delete` tinyint(3) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -1401,11 +1319,7 @@ CREATE TABLE IF NOT EXISTS `node_comment_statistics` (
   `last_comment_timestamp` int(11) NOT NULL DEFAULT '0',
   `last_comment_name` varchar(60) DEFAULT NULL,
   `last_comment_uid` int(11) NOT NULL DEFAULT '0',
-  `comment_count` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`nid`),
-  KEY `node_comment_timestamp` (`last_comment_timestamp`),
-  KEY `comment_count` (`comment_count`),
-  KEY `last_comment_uid` (`last_comment_uid`)
+  `comment_count` int(10) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1418,8 +1332,7 @@ CREATE TABLE IF NOT EXISTS `node_counter` (
   `nid` int(11) NOT NULL DEFAULT '0',
   `totalcount` bigint(20) unsigned NOT NULL DEFAULT '0',
   `daycount` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `timestamp` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`nid`)
+  `timestamp` int(10) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1430,18 +1343,15 @@ CREATE TABLE IF NOT EXISTS `node_counter` (
 
 CREATE TABLE IF NOT EXISTS `node_revisions` (
   `nid` int(10) unsigned NOT NULL DEFAULT '0',
-  `vid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vid` int(10) unsigned NOT NULL,
   `uid` int(11) NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `body` longtext NOT NULL,
   `teaser` longtext NOT NULL,
   `log` longtext NOT NULL,
   `timestamp` int(11) NOT NULL DEFAULT '0',
-  `format` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`vid`),
-  KEY `nid` (`nid`),
-  KEY `uid` (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `format` int(11) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1463,8 +1373,7 @@ CREATE TABLE IF NOT EXISTS `node_type` (
   `custom` tinyint(4) NOT NULL DEFAULT '0',
   `modified` tinyint(4) NOT NULL DEFAULT '0',
   `locked` tinyint(4) NOT NULL DEFAULT '0',
-  `orig_type` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type`)
+  `orig_type` varchar(255) NOT NULL DEFAULT ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -1483,8 +1392,7 @@ INSERT INTO `node_type` (`type`, `name`, `module`, `description`, `help`, `has_t
 CREATE TABLE IF NOT EXISTS `page_title` (
   `type` varchar(15) NOT NULL DEFAULT 'node',
   `id` int(10) unsigned NOT NULL DEFAULT '0',
-  `page_title` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type`,`id`)
+  `page_title` varchar(255) NOT NULL DEFAULT ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1496,8 +1404,7 @@ CREATE TABLE IF NOT EXISTS `page_title` (
 CREATE TABLE IF NOT EXISTS `pathauto_persist` (
   `entity_type` varchar(32) NOT NULL,
   `entity_id` int(10) unsigned NOT NULL,
-  `pathauto` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`entity_type`,`entity_id`)
+  `pathauto` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1507,13 +1414,11 @@ CREATE TABLE IF NOT EXISTS `pathauto_persist` (
 --
 
 CREATE TABLE IF NOT EXISTS `permission` (
-  `pid` int(11) NOT NULL AUTO_INCREMENT,
+  `pid` int(11) NOT NULL,
   `rid` int(10) unsigned NOT NULL DEFAULT '0',
   `perm` longtext,
-  `tid` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`pid`),
-  KEY `rid` (`rid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+  `tid` int(10) unsigned NOT NULL DEFAULT '0'
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `permission`
@@ -1531,11 +1436,9 @@ INSERT INTO `permission` (`pid`, `rid`, `perm`, `tid`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `role` (
-  `rid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) NOT NULL DEFAULT '',
-  PRIMARY KEY (`rid`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  `rid` int(10) unsigned NOT NULL,
+  `name` varchar(64) NOT NULL DEFAULT ''
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `role`
@@ -1555,9 +1458,7 @@ INSERT INTO `role` (`rid`, `name`) VALUES
 CREATE TABLE IF NOT EXISTS `semaphore` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `value` varchar(255) NOT NULL DEFAULT '',
-  `expire` double NOT NULL,
-  PRIMARY KEY (`name`),
-  KEY `expire` (`expire`)
+  `expire` double NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1572,10 +1473,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `hostname` varchar(128) NOT NULL DEFAULT '',
   `timestamp` int(11) NOT NULL DEFAULT '0',
   `cache` int(11) NOT NULL DEFAULT '0',
-  `session` longtext,
-  PRIMARY KEY (`sid`),
-  KEY `timestamp` (`timestamp`),
-  KEY `uid` (`uid`)
+  `session` longblob
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1594,11 +1492,7 @@ CREATE TABLE IF NOT EXISTS `system` (
   `bootstrap` int(11) NOT NULL DEFAULT '0',
   `schema_version` smallint(6) NOT NULL DEFAULT '-1',
   `weight` int(11) NOT NULL DEFAULT '0',
-  `info` text,
-  PRIMARY KEY (`filename`),
-  KEY `modules` (`type`(12),`status`,`weight`,`filename`),
-  KEY `bootstrap` (`type`(12),`status`,`bootstrap`,`weight`,`filename`),
-  KEY `type_name` (`type`(12),`name`)
+  `info` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -1606,45 +1500,45 @@ CREATE TABLE IF NOT EXISTS `system` (
 --
 
 INSERT INTO `system` (`filename`, `name`, `type`, `owner`, `status`, `throttle`, `bootstrap`, `schema_version`, `weight`, `info`) VALUES
-('themes/garland/minnelli/minnelli.info', 'minnelli', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:14:{s:4:"name";s:8:"Minnelli";s:11:"description";s:56:"Tableless, recolorable, multi-column, fixed width theme.";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:10:"base theme";s:7:"garland";s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/garland/minnelli/script.js";}s:10:"screenshot";s:38:"themes/garland/minnelli/screenshot.png";s:3:"php";s:5:"4.3.5";s:6:"engine";s:11:"phptemplate";}'),
-('themes/garland/garland.info', 'garland', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:13:{s:4:"name";s:7:"Garland";s:11:"description";s:66:"Tableless, recolorable, multi-column, fluid width theme (default).";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:24:"themes/garland/script.js";}s:10:"screenshot";s:29:"themes/garland/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
-('themes/bluemarine/bluemarine.info', 'bluemarine', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:13:{s:4:"name";s:10:"Bluemarine";s:11:"description";s:66:"Table-based multi-column theme with a marine and ash color scheme.";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/bluemarine/script.js";}s:10:"screenshot";s:32:"themes/bluemarine/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
-('themes/pushbutton/pushbutton.info', 'pushbutton', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:13:{s:4:"name";s:10:"Pushbutton";s:11:"description";s:52:"Tabled, multi-column theme in blue and orange tones.";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/pushbutton/script.js";}s:10:"screenshot";s:32:"themes/pushbutton/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
-('themes/chameleon/marvin/marvin.info', 'marvin', 'theme', '', 0, 0, 0, -1, 0, 'a:13:{s:4:"name";s:6:"Marvin";s:11:"description";s:31:"Boxy tabled theme in all grays.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:10:"base theme";s:9:"chameleon";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/chameleon/marvin/script.js";}s:10:"screenshot";s:38:"themes/chameleon/marvin/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
-('themes/chameleon/chameleon.info', 'chameleon', 'theme', 'themes/chameleon/chameleon.theme', 0, 0, 0, -1, 0, 'a:12:{s:4:"name";s:9:"Chameleon";s:11:"description";s:42:"Minimalist tabled theme with light colors.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:8:"features";a:4:{i:0;s:4:"logo";i:1;s:7:"favicon";i:2;s:4:"name";i:3;s:6:"slogan";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:7:"scripts";a:1:{s:9:"script.js";s:26:"themes/chameleon/script.js";}s:10:"screenshot";s:31:"themes/chameleon/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
+('themes/garland/minnelli/minnelli.info', 'minnelli', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:14:{s:4:"name";s:8:"Minnelli";s:11:"description";s:56:"Tableless, recolorable, multi-column, fixed width theme.";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:10:"base theme";s:7:"garland";s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:12:"minnelli.css";s:36:"themes/garland/minnelli/minnelli.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/garland/minnelli/script.js";}s:10:"screenshot";s:38:"themes/garland/minnelli/screenshot.png";s:3:"php";s:5:"4.3.5";s:6:"engine";s:11:"phptemplate";}'),
+('themes/garland/garland.info', 'garland', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:13:{s:4:"name";s:7:"Garland";s:11:"description";s:66:"Tableless, recolorable, multi-column, fluid width theme (default).";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:2:{s:3:"all";a:1:{s:9:"style.css";s:24:"themes/garland/style.css";}s:5:"print";a:1:{s:9:"print.css";s:24:"themes/garland/print.css";}}s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:24:"themes/garland/script.js";}s:10:"screenshot";s:29:"themes/garland/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
+('themes/bluemarine/bluemarine.info', 'bluemarine', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:13:{s:4:"name";s:10:"Bluemarine";s:11:"description";s:66:"Table-based multi-column theme with a marine and ash color scheme.";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/bluemarine/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/bluemarine/script.js";}s:10:"screenshot";s:32:"themes/bluemarine/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
+('themes/pushbutton/pushbutton.info', 'pushbutton', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:13:{s:4:"name";s:10:"Pushbutton";s:11:"description";s:52:"Tabled, multi-column theme in blue and orange tones.";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:27:"themes/pushbutton/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:27:"themes/pushbutton/script.js";}s:10:"screenshot";s:32:"themes/pushbutton/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
+('themes/chameleon/marvin/marvin.info', 'marvin', 'theme', '', 0, 0, 0, -1, 0, 'a:13:{s:4:"name";s:6:"Marvin";s:11:"description";s:31:"Boxy tabled theme in all grays.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:10:"base theme";s:9:"chameleon";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:11:"stylesheets";a:1:{s:3:"all";a:1:{s:9:"style.css";s:33:"themes/chameleon/marvin/style.css";}}s:7:"scripts";a:1:{s:9:"script.js";s:33:"themes/chameleon/marvin/script.js";}s:10:"screenshot";s:38:"themes/chameleon/marvin/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
+('themes/chameleon/chameleon.info', 'chameleon', 'theme', 'themes/chameleon/chameleon.theme', 0, 0, 0, -1, 0, 'a:12:{s:4:"name";s:9:"Chameleon";s:11:"description";s:42:"Minimalist tabled theme with light colors.";s:7:"regions";a:2:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";}s:8:"features";a:4:{i:0;s:4:"logo";i:1;s:7:"favicon";i:2;s:4:"name";i:3;s:6:"slogan";}s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:9:"style.css";s:26:"themes/chameleon/style.css";s:10:"common.css";s:27:"themes/chameleon/common.css";}}s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:7:"scripts";a:1:{s:9:"script.js";s:26:"themes/chameleon/script.js";}s:10:"screenshot";s:31:"themes/chameleon/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/themes/rubik/cube/cube.info', 'cube', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:16:{s:4:"name";s:4:"Cube";s:11:"description";s:44:"Spaces-aware front-end theme based on Rubik.";s:10:"base theme";s:5:"rubik";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:1:{s:6:"screen";a:1:{s:9:"style.css";s:37:"sites/all/themes/rubik/cube/style.css";}}s:7:"regions";a:4:{s:6:"header";s:6:"Header";s:7:"content";s:7:"Content";s:4:"left";s:4:"Left";s:5:"right";s:5:"Right";}s:9:"designkit";a:2:{s:5:"color";a:1:{s:10:"background";s:7:"#0088cc";}s:4:"logo";a:2:{s:4:"logo";s:23:"imagecache_scale:200x50";s:5:"print";s:24:"imagecache_scale:600x150";}}s:7:"layouts";a:5:{s:7:"default";a:3:{s:4:"name";s:7:"Default";s:11:"description";s:23:"Simple one column page.";s:8:"template";s:4:"page";}s:7:"sidebar";a:5:{s:4:"name";s:7:"Sidebar";s:11:"description";s:26:"Main content with sidebar.";s:10:"stylesheet";s:18:"layout-sidebar.css";s:8:"template";s:14:"layout-sidebar";s:7:"regions";a:2:{i:0;s:7:"content";i:1;s:5:"right";}}s:5:"split";a:5:{s:4:"name";s:5:"Split";s:11:"description";s:12:"50/50 split.";s:10:"stylesheet";s:16:"layout-split.css";s:8:"template";s:14:"layout-sidebar";s:7:"regions";a:2:{i:0;s:7:"content";i:1;s:5:"right";}}s:7:"columns";a:5:{s:4:"name";s:7:"Columns";s:11:"description";s:20:"Three column layout.";s:10:"stylesheet";s:18:"layout-columns.css";s:8:"template";s:14:"layout-columns";s:7:"regions";a:4:{i:0;s:6:"header";i:1;s:7:"content";i:2;s:4:"left";i:3;s:5:"right";}}s:6:"offset";a:5:{s:4:"name";s:15:"Offset sidebars";s:11:"description";s:38:"Main content with two offset sidebars.";s:10:"stylesheet";s:17:"layout-offset.css";s:8:"template";s:13:"layout-offset";s:7:"regions";a:4:{i:0;s:6:"header";i:1;s:7:"content";i:2;s:4:"left";i:3;s:5:"right";}}}s:7:"version";s:13:"6.x-3.0-beta3";s:7:"project";s:5:"rubik";s:9:"datestamp";s:10:"1329952845";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:7:"scripts";a:1:{s:9:"script.js";s:37:"sites/all/themes/rubik/cube/script.js";}s:10:"screenshot";s:42:"sites/all/themes/rubik/cube/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/themes/rubik/rubik.info', 'rubik', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:14:{s:4:"name";s:5:"Rubik";s:11:"description";s:18:"Clean admin theme.";s:10:"base theme";s:3:"tao";s:4:"core";s:3:"6.x";s:6:"engine";s:11:"phptemplate";s:7:"scripts";a:1:{s:11:"js/rubik.js";s:34:"sites/all/themes/rubik/js/rubik.js";}s:11:"stylesheets";a:1:{s:6:"screen";a:3:{s:8:"core.css";s:31:"sites/all/themes/rubik/core.css";s:9:"icons.css";s:32:"sites/all/themes/rubik/icons.css";s:9:"style.css";s:32:"sites/all/themes/rubik/style.css";}}s:7:"version";s:13:"6.x-3.0-beta3";s:7:"project";s:5:"rubik";s:9:"datestamp";s:10:"1329952845";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:10:"screenshot";s:37:"sites/all/themes/rubik/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/themes/tao/tao.info', 'tao', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 0, 0, 0, -1, 0, 'a:13:{s:4:"core";s:3:"6.x";s:11:"description";s:149:"Tao is a base theme that is all about going with the flow. It takes care of key reset and utility tasks so that sub-themes can get on with their job.";s:6:"engine";s:11:"phptemplate";s:4:"name";s:3:"Tao";s:7:"regions";a:5:{s:4:"left";s:12:"Left sidebar";s:5:"right";s:13:"Right sidebar";s:7:"content";s:7:"Content";s:6:"header";s:6:"Header";s:6:"footer";s:6:"Footer";}s:7:"scripts";a:1:{s:9:"js/tao.js";s:30:"sites/all/themes/tao/js/tao.js";}s:11:"stylesheets";a:3:{s:6:"screen";a:3:{s:9:"reset.css";s:30:"sites/all/themes/tao/reset.css";s:10:"drupal.css";s:31:"sites/all/themes/tao/drupal.css";s:8:"base.css";s:29:"sites/all/themes/tao/base.css";}s:5:"print";a:3:{s:9:"reset.css";s:30:"sites/all/themes/tao/reset.css";s:8:"base.css";s:29:"sites/all/themes/tao/base.css";s:9:"print.css";s:30:"sites/all/themes/tao/print.css";}s:3:"all";a:20:{s:9:"admin.css";s:30:"sites/all/themes/tao/admin.css";s:9:"block.css";s:30:"sites/all/themes/tao/block.css";s:8:"book.css";s:29:"sites/all/themes/tao/book.css";s:11:"comment.css";s:32:"sites/all/themes/tao/comment.css";s:9:"dblog.css";s:30:"sites/all/themes/tao/dblog.css";s:12:"defaults.css";s:33:"sites/all/themes/tao/defaults.css";s:9:"forum.css";s:30:"sites/all/themes/tao/forum.css";s:8:"help.css";s:29:"sites/all/themes/tao/help.css";s:15:"maintenance.css";s:36:"sites/all/themes/tao/maintenance.css";s:8:"node.css";s:29:"sites/all/themes/tao/node.css";s:10:"openid.css";s:31:"sites/all/themes/tao/openid.css";s:8:"poll.css";s:29:"sites/all/themes/tao/poll.css";s:11:"profile.css";s:32:"sites/all/themes/tao/profile.css";s:10:"search.css";s:31:"sites/all/themes/tao/search.css";s:10:"system.css";s:31:"sites/all/themes/tao/system.css";s:16:"system-menus.css";s:37:"sites/all/themes/tao/system-menus.css";s:12:"taxonomy.css";s:33:"sites/all/themes/tao/taxonomy.css";s:11:"tracker.css";s:32:"sites/all/themes/tao/tracker.css";s:10:"update.css";s:31:"sites/all/themes/tao/update.css";s:8:"user.css";s:29:"sites/all/themes/tao/user.css";}}s:7:"version";s:7:"6.x-3.3";s:7:"project";s:3:"tao";s:9:"datestamp";s:10:"1329952556";s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:10:"screenshot";s:35:"sites/all/themes/tao/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/themes/virdini/virdini.info', 'virdini', 'theme', 'themes/engines/phptemplate/phptemplate.engine', 1, 0, 0, -1, 0, 'a:11:{s:4:"name";s:11:"Virdini.com";s:11:"description";s:45:"Theme designed by Virdini.сom for this site.";s:4:"core";s:3:"6.x";s:7:"project";s:7:"virdini";s:6:"engine";s:11:"phptemplate";s:11:"stylesheets";a:1:{s:3:"all";a:2:{s:13:"css/style.css";s:38:"sites/all/themes/virdini/css/style.css";s:19:"css/forms-style.css";s:44:"sites/all/themes/virdini/css/forms-style.css";}}s:7:"scripts";a:1:{s:12:"js/script.js";s:37:"sites/all/themes/virdini/js/script.js";}s:7:"regions";a:8:{s:4:"left";s:11:"Left region";s:9:"main_menu";s:9:"Main menu";s:5:"right";s:12:"Right region";s:7:"content";s:7:"Content";s:6:"header";s:13:"Header region";s:6:"footer";s:13:"Footer region";s:4:"lang";s:9:"Languages";s:6:"search";s:6:"Search";}s:8:"features";a:10:{i:0;s:20:"comment_user_picture";i:1;s:7:"favicon";i:2;s:7:"mission";i:3;s:4:"logo";i:4;s:4:"name";i:5;s:17:"node_user_picture";i:6;s:6:"search";i:7;s:6:"slogan";i:8;s:13:"primary_links";i:9;s:15:"secondary_links";}s:10:"screenshot";s:39:"sites/all/themes/virdini/screenshot.png";s:3:"php";s:5:"4.3.5";}'),
-('modules/system/system.module', 'system', 'module', '', 1, 0, 0, 6055, 0, 'a:10:{s:4:"name";s:6:"System";s:11:"description";s:54:"Handles general site configuration for administrators.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/system/system.module', 'system', 'module', '', 1, 0, 0, 6056, 0, 'a:10:{s:4:"name";s:6:"System";s:11:"description";s:54:"Handles general site configuration for administrators.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/admin/admin.module', 'admin', 'module', '', 1, 0, 0, 6202, 1, 'a:10:{s:4:"name";s:5:"Admin";s:11:"description";s:42:"UI helpers for Drupal admins and managers.";s:7:"package";s:14:"Administration";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-2.0";s:7:"project";s:5:"admin";s:9:"datestamp";s:10:"1282226188";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/advagg/advagg.module', 'advagg', 'module', '', 0, 0, 0, -1, 250, 'a:10:{s:4:"name";s:27:"Advanced CSS/JS Aggregation";s:11:"description";s:101:"Aggregates multiple CSS/JS files, serves them with gzip encoding and smart client-side cache headers.";s:7:"package";s:27:"Advanced CSS/JS Aggregation";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-1.9";s:7:"project";s:6:"advagg";s:9:"datestamp";s:10:"1340665277";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/advagg/advagg_bundler/advagg_bundler.module', 'advagg_bundler', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:14:"AdvAgg Bundler";s:11:"description";s:89:"Provides intelligent bundling of CSS and JS files by grouping files that belong together.";s:7:"package";s:27:"Advanced CSS/JS Aggregation";s:4:"core";s:3:"6.x";s:12:"dependencies";a:1:{i:0;s:6:"advagg";}s:7:"version";s:7:"6.x-1.9";s:7:"project";s:6:"advagg";s:9:"datestamp";s:10:"1340665277";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/advagg/advagg_css_compress/advagg_css_compress.module', 'advagg_css_compress', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:19:"AdvAgg Compress CSS";s:11:"description";s:60:"Compress CSS with a 3rd party compressor, CSSTidy currently.";s:7:"package";s:27:"Advanced CSS/JS Aggregation";s:4:"core";s:3:"6.x";s:12:"dependencies";a:1:{i:0;s:6:"advagg";}s:3:"php";s:3:"5.0";s:7:"version";s:7:"6.x-1.9";s:7:"project";s:6:"advagg";s:9:"datestamp";s:10:"1340665277";s:10:"dependents";a:0:{}}'),
 ('sites/all/modules/advagg/advagg_js_cdn/advagg_js_cdn.module', 'advagg_js_cdn', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:21:"AdvAgg CDN Javascript";s:11:"description";s:74:"Use a shared CDN for javascript libraries, Google Libraries API currently.";s:7:"package";s:27:"Advanced CSS/JS Aggregation";s:4:"core";s:3:"6.x";s:12:"dependencies";a:1:{i:0;s:6:"advagg";}s:7:"version";s:7:"6.x-1.9";s:7:"project";s:6:"advagg";s:9:"datestamp";s:10:"1340665277";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/advagg/advagg_js_compress/advagg_js_compress.module', 'advagg_js_compress', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:26:"AdvAgg Compress Javascript";s:11:"description";s:66:"Compress Javascript with a 3rd party compressor, JSMin+ currently.";s:7:"package";s:27:"Advanced CSS/JS Aggregation";s:4:"core";s:3:"6.x";s:12:"dependencies";a:1:{i:0;s:6:"advagg";}s:7:"version";s:7:"6.x-1.9";s:7:"project";s:6:"advagg";s:9:"datestamp";s:10:"1340665277";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/aggregator/aggregator.module', 'aggregator', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:10:"Aggregator";s:11:"description";s:57:"Aggregates syndicated content (RSS, RDF, and Atom feeds).";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/block/block.module', 'block', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:5:"Block";s:11:"description";s:62:"Controls the boxes that are displayed around the main content.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/blog/blog.module', 'blog', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:4:"Blog";s:11:"description";s:69:"Enables keeping easily and regularly updated user web pages or blogs.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/blogapi/blogapi.module', 'blogapi', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:8:"Blog API";s:11:"description";s:79:"Allows users to post content using applications that support XML-RPC blog APIs.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/book/book.module', 'book', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:4:"Book";s:11:"description";s:63:"Allows users to structure site pages in a hierarchy or outline.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/color/color.module', 'color', 'module', '', 0, 0, 0, 6001, 0, 'a:10:{s:4:"name";s:5:"Color";s:11:"description";s:61:"Allows the user to change the color scheme of certain themes.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/aggregator/aggregator.module', 'aggregator', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:10:"Aggregator";s:11:"description";s:57:"Aggregates syndicated content (RSS, RDF, and Atom feeds).";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/block/block.module', 'block', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:5:"Block";s:11:"description";s:62:"Controls the boxes that are displayed around the main content.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/blog/blog.module', 'blog', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:4:"Blog";s:11:"description";s:69:"Enables keeping easily and regularly updated user web pages or blogs.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/blogapi/blogapi.module', 'blogapi', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:8:"Blog API";s:11:"description";s:79:"Allows users to post content using applications that support XML-RPC blog APIs.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/book/book.module', 'book', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:4:"Book";s:11:"description";s:63:"Allows users to structure site pages in a hierarchy or outline.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/color/color.module', 'color', 'module', '', 0, 0, 0, 6001, 0, 'a:10:{s:4:"name";s:5:"Color";s:11:"description";s:61:"Allows the user to change the color scheme of certain themes.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/colorbox/colorbox.module', 'colorbox', 'module', '', 0, 0, 0, -1, 0, 'a:9:{s:4:"name";s:8:"Colorbox";s:11:"description";s:72:"A light-weight, customizable lightbox plugin for jQuery 1.3 through 1.6.";s:4:"core";s:3:"6.x";s:12:"dependencies";a:1:{i:0;s:14:"virdini_jquery";}s:7:"version";s:7:"6.x-1.4";s:7:"project";s:8:"colorbox";s:9:"datestamp";s:10:"1358398265";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/comment/comment.module', 'comment', 'module', '', 0, 0, 0, 6005, 0, 'a:10:{s:4:"name";s:7:"Comment";s:11:"description";s:57:"Allows users to comment on and discuss published content.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/contact/contact.module', 'contact', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:7:"Contact";s:11:"description";s:61:"Enables the use of both personal and site-wide contact forms.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/content.module', 'content', 'module', '', 1, 0, 0, 6010, 0, 'a:10:{s:4:"name";s:7:"Content";s:11:"description";s:50:"Allows administrators to define new content types.";s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-2.9";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1294407979";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/modules/content_copy/content_copy.module', 'content_copy', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:12:"Content Copy";s:11:"description";s:51:"Enables ability to import/export field definitions.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-2.9";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1294407979";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/modules/content_permissions/content_permissions.module', 'content_permissions', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:19:"Content Permissions";s:11:"description";s:43:"Set field-level permissions for CCK fields.";s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"version";s:7:"6.x-2.9";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1294407979";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/comment/comment.module', 'comment', 'module', '', 0, 0, 0, 6005, 0, 'a:10:{s:4:"name";s:7:"Comment";s:11:"description";s:57:"Allows users to comment on and discuss published content.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/contact/contact.module', 'contact', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:7:"Contact";s:11:"description";s:61:"Enables the use of both personal and site-wide contact forms.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/content.module', 'content', 'module', '', 1, 0, 0, 6010, 0, 'a:10:{s:4:"name";s:7:"Content";s:11:"description";s:50:"Allows administrators to define new content types.";s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.10";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1434568159";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/modules/content_copy/content_copy.module', 'content_copy', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:12:"Content Copy";s:11:"description";s:51:"Enables ability to import/export field definitions.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.10";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1434568159";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/modules/content_permissions/content_permissions.module', 'content_permissions', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:19:"Content Permissions";s:11:"description";s:43:"Set field-level permissions for CCK fields.";s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"version";s:8:"6.x-2.10";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1434568159";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/ctm/ctm.module', 'ctm', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:30:"Menu Settings per Content Type";s:11:"description";s:98:"This module allow to set the Menu Settings with certain Menus for content editing by Content Type.";s:7:"package";s:14:"Administration";s:4:"core";s:3:"6.x";s:7:"project";s:3:"ctm";s:7:"version";s:7:"6.x-1.1";s:9:"datestamp";s:10:"1305175615";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/dblog/dblog.module', 'dblog', 'module', '', 1, 0, 0, 6000, 0, 'a:10:{s:4:"name";s:16:"Database logging";s:11:"description";s:47:"Logs and records system events to the database.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/fast_404/fast_404.module', 'fast_404', 'module', '', 1, 0, 1, 0, -1000, 'a:9:{s:4:"name";s:8:"Fast 404";s:11:"description";s:90:"Speed up the generation of 404 pages with this module. Route 404 display to a static page.";s:4:"core";s:3:"6.x";s:7:"version";s:11:"6.x-1.x-dev";s:7:"project";s:8:"fast_404";s:9:"datestamp";s:10:"1331381592";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/modules/fieldgroup/fieldgroup.module', 'fieldgroup', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:10:"Fieldgroup";s:11:"description";s:37:"Create display groups for CCK fields.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-2.9";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1294407979";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/modules/filefield/filefield.module', 'filefield', 'module', '', 1, 0, 0, 6104, 0, 'a:10:{s:4:"name";s:9:"FileField";s:11:"description";s:26:"Defines a file field type.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:3:"php";s:3:"5.0";s:7:"version";s:8:"6.x-3.13";s:7:"project";s:9:"filefield";s:9:"datestamp";s:10:"1405541029";s:10:"dependents";a:0:{}}'),
-('sites/all/modules/cck/modules/filefield/filefield_meta/filefield_meta.module', 'filefield_meta', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:14:"FileField Meta";s:11:"description";s:48:"Add metadata gathering and storage to FileField.";s:12:"dependencies";a:2:{i:0;s:9:"filefield";i:1;s:6:"getid3";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:3:"php";s:3:"5.0";s:7:"version";s:8:"6.x-3.13";s:7:"project";s:9:"filefield";s:9:"datestamp";s:10:"1405541029";s:10:"dependents";a:0:{}}'),
-('modules/filter/filter.module', 'filter', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:6:"Filter";s:11:"description";s:60:"Handles the filtering of content in preparation for display.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/forum/forum.module', 'forum', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:5:"Forum";s:11:"description";s:50:"Enables threaded discussions about general topics.";s:12:"dependencies";a:2:{i:0;s:8:"taxonomy";i:1;s:7:"comment";}s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/dblog/dblog.module', 'dblog', 'module', '', 1, 0, 0, 6000, 0, 'a:10:{s:4:"name";s:16:"Database logging";s:11:"description";s:47:"Logs and records system events to the database.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/fast_404/fast_404.module', 'fast_404', 'module', '', 1, 0, 1, 0, -1000, 'a:9:{s:4:"name";s:8:"Fast 404";s:11:"description";s:90:"Speed up the generation of 404 pages with this module. Route 404 display to a static page.";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-1.6";s:7:"project";s:8:"fast_404";s:9:"datestamp";s:10:"1416280383";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/modules/fieldgroup/fieldgroup.module', 'fieldgroup', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:10:"Fieldgroup";s:11:"description";s:37:"Create display groups for CCK fields.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.10";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1434568159";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/modules/filefield/filefield.module', 'filefield', 'module', '', 1, 0, 0, 6104, 0, 'a:10:{s:4:"name";s:9:"FileField";s:11:"description";s:26:"Defines a file field type.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:3:"php";s:3:"5.0";s:7:"version";s:8:"6.x-3.14";s:7:"project";s:9:"filefield";s:9:"datestamp";s:10:"1456327142";s:10:"dependents";a:0:{}}'),
+('sites/all/modules/cck/modules/filefield/filefield_meta/filefield_meta.module', 'filefield_meta', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:14:"FileField Meta";s:11:"description";s:48:"Add metadata gathering and storage to FileField.";s:12:"dependencies";a:2:{i:0;s:9:"filefield";i:1;s:6:"getid3";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:3:"php";s:3:"5.0";s:7:"version";s:8:"6.x-3.14";s:7:"project";s:9:"filefield";s:9:"datestamp";s:10:"1456327142";s:10:"dependents";a:0:{}}'),
+('modules/filter/filter.module', 'filter', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:6:"Filter";s:11:"description";s:60:"Handles the filtering of content in preparation for display.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/forum/forum.module', 'forum', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:5:"Forum";s:11:"description";s:50:"Enables threaded discussions about general topics.";s:12:"dependencies";a:2:{i:0;s:8:"taxonomy";i:1;s:7:"comment";}s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/globalredirect/globalredirect.module', 'globalredirect', 'module', '', 1, 0, 0, 6101, 0, 'a:9:{s:4:"name";s:15:"Global Redirect";s:11:"description";s:129:"Searches for an alias of the current URL and 301 redirects if found. Stops duplicate content arising when path module is enabled.";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-1.5";s:7:"project";s:14:"globalredirect";s:9:"datestamp";s:10:"1339752680";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/help/help.module', 'help', 'module', '', 0, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"Help";s:11:"description";s:35:"Manages the display of online help.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/help/help.module', 'help', 'module', '', 0, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"Help";s:11:"description";s:35:"Manages the display of online help.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/imageapi/imageapi.module', 'imageapi', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:8:"ImageAPI";s:11:"description";s:38:"ImageAPI supporting multiple toolkits.";s:7:"package";s:10:"ImageCache";s:4:"core";s:3:"6.x";s:3:"php";s:3:"5.1";s:7:"version";s:8:"6.x-1.10";s:7:"project";s:8:"imageapi";s:9:"datestamp";s:10:"1305563215";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}}'),
 ('sites/all/modules/imageapi/imageapi_gd.module', 'imageapi_gd', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:12:"ImageAPI GD2";s:11:"description";s:49:"Uses PHP''s built-in GD2 image processing support.";s:7:"package";s:10:"ImageCache";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.10";s:7:"project";s:8:"imageapi";s:9:"datestamp";s:10:"1305563215";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/imageapi/imageapi_imagemagick.module', 'imageapi_imagemagick', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:20:"ImageAPI ImageMagick";s:11:"description";s:33:"Command Line ImageMagick support.";s:7:"package";s:10:"ImageCache";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.10";s:7:"project";s:8:"imageapi";s:9:"datestamp";s:10:"1305563215";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
@@ -1655,42 +1549,42 @@ INSERT INTO `system` (`filename`, `name`, `type`, `owner`, `status`, `throttle`,
 ('sites/all/modules/imce_wysiwyg/imce_wysiwyg.module', 'imce_wysiwyg', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:23:"IMCE Wysiwyg API bridge";s:11:"description";s:82:"Makes IMCE available as plugin for client-side editors integrated via Wysiwyg API.";s:7:"package";s:14:"User interface";s:4:"core";s:3:"6.x";s:12:"dependencies";a:2:{i:0;s:4:"imce";i:1;s:7:"wysiwyg";}s:7:"version";s:7:"6.x-1.1";s:7:"project";s:12:"imce_wysiwyg";s:9:"datestamp";s:10:"1268433606";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/jquery_ui/jquery_ui.module', 'jquery_ui', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:9:"jQuery UI";s:11:"description";s:55:"Provides the jQuery UI plug-in to other Drupal modules.";s:7:"package";s:14:"User interface";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-1.5";s:7:"project";s:9:"jquery_ui";s:9:"datestamp";s:10:"1308323216";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/l10n_update/l10n_update.module', 'l10n_update', 'module', '', 1, 0, 0, 6005, 0, 'a:10:{s:4:"name";s:19:"Localization update";s:11:"description";s:58:"Provides automatic downloads and updates for translations.";s:12:"dependencies";a:1:{i:0;s:6:"locale";}s:4:"core";s:3:"6.x";s:7:"package";s:13:"Multilanguage";s:3:"php";s:1:"5";s:7:"version";s:13:"6.x-1.0-beta3";s:7:"project";s:11:"l10n_update";s:9:"datestamp";s:10:"1330292747";s:10:"dependents";a:0:{}}'),
-('modules/locale/locale.module', 'locale', 'module', '', 1, 0, 0, 6007, 0, 'a:10:{s:4:"name";s:6:"Locale";s:11:"description";s:119:"Adds language handling functionality and enables the translation of the user interface to languages other than English.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/menu/menu.module', 'menu', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"Menu";s:11:"description";s:60:"Allows administrators to customize the site navigation menu.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/node/node.module', 'node', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"Node";s:11:"description";s:66:"Allows content to be submitted to the site and displayed on pages.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/modules/nodereference/nodereference.module', 'nodereference', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:14:"Node Reference";s:11:"description";s:59:"Defines a field type for referencing one node from another.";s:12:"dependencies";a:3:{i:0;s:7:"content";i:1;s:4:"text";i:2;s:13:"optionwidgets";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-2.9";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1294407979";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/locale/locale.module', 'locale', 'module', '', 1, 0, 0, 6007, 0, 'a:10:{s:4:"name";s:6:"Locale";s:11:"description";s:119:"Adds language handling functionality and enables the translation of the user interface to languages other than English.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/menu/menu.module', 'menu', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"Menu";s:11:"description";s:60:"Allows administrators to customize the site navigation menu.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/node/node.module', 'node', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"Node";s:11:"description";s:66:"Allows content to be submitted to the site and displayed on pages.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/modules/nodereference/nodereference.module', 'nodereference', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:14:"Node Reference";s:11:"description";s:59:"Defines a field type for referencing one node from another.";s:12:"dependencies";a:3:{i:0;s:7:"content";i:1;s:4:"text";i:2;s:13:"optionwidgets";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.10";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1434568159";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/nodewords/nodewords.module', 'nodewords', 'module', '', 1, 0, 0, 6187, 10, 'a:11:{s:4:"name";s:9:"Nodewords";s:11:"description";s:67:"Implement an API that other modules can use to implement meta tags.";s:7:"package";s:9:"Meta tags";s:4:"core";s:3:"6.x";s:10:"recommends";a:2:{i:0;s:8:"checkall";i:1;s:13:"vertical_tabs";}s:7:"version";s:8:"6.x-1.14";s:7:"project";s:9:"nodewords";s:9:"datestamp";s:10:"1354723721";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/nodewords/nodewords_basic/nodewords_basic.module', 'nodewords_basic', 'module', '', 1, 0, 0, 6114, 12, 'a:10:{s:4:"name";s:25:"Nodewords basic meta tags";s:11:"description";s:199:"Add the ''abstract'', ''canonical'', ''copyright'', ''description'', ''keywords'', ''logo'', ''original-source'', ''revisit-after'', ''robots'', ''standout'' and ''syndication-source'' meta tags, and the ''title'' HTML tag.";s:12:"dependencies";a:1:{i:0;s:9:"nodewords";}s:7:"package";s:9:"Meta tags";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.14";s:7:"project";s:9:"nodewords";s:9:"datestamp";s:10:"1354723721";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/nodewords/nodewords_extra/nodewords_extra.module', 'nodewords_extra', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:25:"Nodewords extra meta tags";s:11:"description";s:100:"Add the Dublin Core, ''geo.placename'', ''geo.position'', ''geo.region'', ''icbm'' and ''shorturl'' meta tags.";s:12:"dependencies";a:1:{i:0;s:9:"nodewords";}s:7:"package";s:9:"Meta tags";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.14";s:7:"project";s:9:"nodewords";s:9:"datestamp";s:10:"1354723721";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/nodewords/nodewords_og/nodewords_og.module', 'nodewords_og', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:30:"Nodewords Open Graph meta tags";s:11:"description";s:172:"Add the Open Graph (i.e. Facebook) meta tags. Note: the theme must be customized in order for these tags to work correctly, please see the README.txt file for full details.";s:12:"dependencies";a:2:{i:0;s:9:"nodewords";i:1;s:15:"nodewords_basic";}s:7:"package";s:9:"Meta tags";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.14";s:7:"project";s:9:"nodewords";s:9:"datestamp";s:10:"1354723721";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/modules/number/number.module', 'number', 'module', '', 1, 0, 0, 6000, 0, 'a:10:{s:4:"name";s:6:"Number";s:11:"description";s:28:"Defines numeric field types.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-2.9";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1294407979";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/openid/openid.module', 'openid', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:6:"OpenID";s:11:"description";s:48:"Allows users to log into your site using OpenID.";s:7:"version";s:4:"6.35";s:7:"package";s:15:"Core - optional";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/modules/optionwidgets/optionwidgets.module', 'optionwidgets', 'module', '', 1, 0, 0, 6001, 0, 'a:10:{s:4:"name";s:14:"Option Widgets";s:11:"description";s:82:"Defines selection, check box and radio button widgets for text and numeric fields.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-2.9";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1294407979";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/path/path.module', 'path', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"Path";s:11:"description";s:28:"Allows users to rename URLs.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/modules/number/number.module', 'number', 'module', '', 1, 0, 0, 6000, 0, 'a:10:{s:4:"name";s:6:"Number";s:11:"description";s:28:"Defines numeric field types.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.10";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1434568159";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/openid/openid.module', 'openid', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:6:"OpenID";s:11:"description";s:48:"Allows users to log into your site using OpenID.";s:7:"version";s:4:"6.38";s:7:"package";s:15:"Core - optional";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/modules/optionwidgets/optionwidgets.module', 'optionwidgets', 'module', '', 1, 0, 0, 6001, 0, 'a:10:{s:4:"name";s:14:"Option Widgets";s:11:"description";s:82:"Defines selection, check box and radio button widgets for text and numeric fields.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.10";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1434568159";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/path/path.module', 'path', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"Path";s:11:"description";s:28:"Allows users to rename URLs.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/pathauto/pathauto.module', 'pathauto', 'module', '', 1, 0, 0, 7, 1, 'a:10:{s:4:"name";s:8:"Pathauto";s:11:"description";s:95:"Provides a mechanism for modules to automatically generate aliases for the content they manage.";s:12:"dependencies";a:2:{i:0;s:4:"path";i:1;s:5:"token";}s:4:"core";s:3:"6.x";s:10:"recommends";a:1:{i:0;s:13:"path_redirect";}s:7:"version";s:7:"6.x-1.6";s:7:"project";s:8:"pathauto";s:9:"datestamp";s:10:"1320076535";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/php/php.module', 'php', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:10:"PHP filter";s:11:"description";s:50:"Allows embedded PHP code/snippets to be evaluated.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/ping/ping.module', 'ping', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:4:"Ping";s:11:"description";s:51:"Alerts other sites when your site has been updated.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/poll/poll.module', 'poll', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:4:"Poll";s:11:"description";s:95:"Allows your site to capture votes on different topics in the form of multiple choice questions.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/profile/profile.module', 'profile', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:7:"Profile";s:11:"description";s:36:"Supports configurable user profiles.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/search/search.module', 'search', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:6:"Search";s:11:"description";s:36:"Enables site-wide keyword searching.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/php/php.module', 'php', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:10:"PHP filter";s:11:"description";s:50:"Allows embedded PHP code/snippets to be evaluated.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/ping/ping.module', 'ping', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:4:"Ping";s:11:"description";s:51:"Alerts other sites when your site has been updated.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/poll/poll.module', 'poll', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:4:"Poll";s:11:"description";s:95:"Allows your site to capture votes on different topics in the form of multiple choice questions.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/profile/profile.module', 'profile', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:7:"Profile";s:11:"description";s:36:"Supports configurable user profiles.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/search/search.module', 'search', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:6:"Search";s:11:"description";s:36:"Enables site-wide keyword searching.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/smtp/smtp.module', 'smtp', 'module', '', 0, 0, 0, 0, 0, 'a:10:{s:4:"name";s:27:"SMTP Authentication Support";s:11:"description";s:72:"Allows the sending of site e-mail through an SMTP server of your choice.";s:4:"core";s:3:"6.x";s:7:"package";s:4:"Mail";s:3:"php";s:5:"4.0.0";s:7:"version";s:7:"6.x-1.1";s:7:"project";s:4:"smtp";s:9:"datestamp";s:10:"1360762545";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}}'),
-('modules/statistics/statistics.module', 'statistics', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:10:"Statistics";s:11:"description";s:37:"Logs access statistics for your site.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/syslog/syslog.module', 'syslog', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:6:"Syslog";s:11:"description";s:41:"Logs and records system events to syslog.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/taxonomy/taxonomy.module', 'taxonomy', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:8:"Taxonomy";s:11:"description";s:38:"Enables the categorization of content.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/modules/text/text.module', 'text', 'module', '', 1, 0, 0, 6003, 0, 'a:10:{s:4:"name";s:4:"Text";s:11:"description";s:32:"Defines simple text field types.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-2.9";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1294407979";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/throttle/throttle.module', 'throttle', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:8:"Throttle";s:11:"description";s:66:"Handles the auto-throttling mechanism, to control site congestion.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/statistics/statistics.module', 'statistics', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:10:"Statistics";s:11:"description";s:37:"Logs access statistics for your site.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/syslog/syslog.module', 'syslog', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:6:"Syslog";s:11:"description";s:41:"Logs and records system events to syslog.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/taxonomy/taxonomy.module', 'taxonomy', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:8:"Taxonomy";s:11:"description";s:38:"Enables the categorization of content.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/modules/text/text.module', 'text', 'module', '', 1, 0, 0, 6003, 0, 'a:10:{s:4:"name";s:4:"Text";s:11:"description";s:32:"Defines simple text field types.";s:12:"dependencies";a:1:{i:0;s:7:"content";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.10";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1434568159";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/throttle/throttle.module', 'throttle', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:8:"Throttle";s:11:"description";s:66:"Handles the auto-throttling mechanism, to control site congestion.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/token/token.module', 'token', 'module', '', 1, 0, 0, 1, 10, 'a:9:{s:4:"name";s:5:"Token";s:11:"description";s:79:"Provides a shared API for replacement of textual placeholders with actual data.";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.19";s:7:"project";s:5:"token";s:9:"datestamp";s:10:"1347470077";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/token/tokenSTARTER.module', 'tokenSTARTER', 'module', '', 0, 0, 0, -1, 0, 'a:9:{s:4:"name";s:12:"TokenSTARTER";s:11:"description";s:72:"Provides additional tokens and a base on which to build your own tokens.";s:12:"dependencies";a:1:{i:0;s:5:"token";}s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.19";s:7:"project";s:5:"token";s:9:"datestamp";s:10:"1347470077";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/token/token_actions.module', 'token_actions', 'module', '', 1, 0, 0, 0, 0, 'a:9:{s:4:"name";s:13:"Token actions";s:11:"description";s:73:"Provides enhanced versions of core Drupal actions using the Token module.";s:12:"dependencies";a:1:{i:0;s:5:"token";}s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.19";s:7:"project";s:5:"token";s:9:"datestamp";s:10:"1347470077";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/token/tests/token_test.module', 'token_test', 'module', '', 0, 0, 0, -1, 0, 'a:12:{s:4:"name";s:10:"Token Test";s:11:"description";s:39:"Testing module for token functionality.";s:7:"package";s:7:"Testing";s:4:"core";s:3:"6.x";s:5:"files";a:1:{i:0;s:17:"token_test.module";}s:6:"hidden";b:1;s:7:"version";s:8:"6.x-1.19";s:7:"project";s:5:"token";s:9:"datestamp";s:10:"1347470077";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/tracker/tracker.module', 'tracker', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:7:"Tracker";s:11:"description";s:43:"Enables tracking of recent posts for users.";s:12:"dependencies";a:1:{i:0;s:7:"comment";}s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/translation/translation.module', 'translation', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:19:"Content translation";s:11:"description";s:57:"Allows content to be translated into different languages.";s:12:"dependencies";a:1:{i:0;s:6:"locale";}s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/tracker/tracker.module', 'tracker', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:7:"Tracker";s:11:"description";s:43:"Enables tracking of recent posts for users.";s:12:"dependencies";a:1:{i:0;s:7:"comment";}s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/translation/translation.module', 'translation', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:19:"Content translation";s:11:"description";s:57:"Allows content to be translated into different languages.";s:12:"dependencies";a:1:{i:0;s:6:"locale";}s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/transliteration/transliteration.module', 'transliteration', 'module', '', 1, 0, 0, 0, 0, 'a:9:{s:4:"name";s:15:"Transliteration";s:11:"description";s:61:"Converts non-latin text to US-ASCII and sanitizes file names.";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-3.1";s:7:"project";s:15:"transliteration";s:9:"datestamp";s:10:"1338540716";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/trigger/trigger.module', 'trigger', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:7:"Trigger";s:11:"description";s:90:"Enables actions to be fired on certain system events, such as when new content is created.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/update/update.module', 'update', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:13:"Update status";s:11:"description";s:88:"Checks the status of available updates for Drupal and your installed modules and themes.";s:7:"version";s:4:"6.35";s:7:"package";s:15:"Core - optional";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/upload/upload.module', 'upload', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:6:"Upload";s:11:"description";s:51:"Allows users to upload and attach files to content.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('modules/user/user.module', 'user', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"User";s:11:"description";s:47:"Manages the user registration and login system.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.35";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1426707431";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/cck/modules/userreference/userreference.module', 'userreference', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:14:"User Reference";s:11:"description";s:56:"Defines a field type for referencing a user from a node.";s:12:"dependencies";a:3:{i:0;s:7:"content";i:1;s:4:"text";i:2;s:13:"optionwidgets";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-2.9";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1294407979";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/trigger/trigger.module', 'trigger', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:7:"Trigger";s:11:"description";s:90:"Enables actions to be fired on certain system events, such as when new content is created.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/update/update.module', 'update', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:13:"Update status";s:11:"description";s:88:"Checks the status of available updates for Drupal and your installed modules and themes.";s:7:"version";s:4:"6.38";s:7:"package";s:15:"Core - optional";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/upload/upload.module', 'upload', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:6:"Upload";s:11:"description";s:51:"Allows users to upload and attach files to content.";s:7:"package";s:15:"Core - optional";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('modules/user/user.module', 'user', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:4:"User";s:11:"description";s:47:"Manages the user registration and login system.";s:7:"package";s:15:"Core - required";s:7:"version";s:4:"6.38";s:4:"core";s:3:"6.x";s:7:"project";s:6:"drupal";s:9:"datestamp";s:10:"1456343372";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/cck/modules/userreference/userreference.module', 'userreference', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:14:"User Reference";s:11:"description";s:56:"Defines a field type for referencing a user from a node.";s:12:"dependencies";a:3:{i:0;s:7:"content";i:1;s:4:"text";i:2;s:13:"optionwidgets";}s:7:"package";s:3:"CCK";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.10";s:7:"project";s:3:"cck";s:9:"datestamp";s:10:"1434568159";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/views/views.module', 'views', 'module', '', 1, 0, 0, 6013, 10, 'a:10:{s:4:"name";s:5:"Views";s:11:"description";s:55:"Create customized lists and queries from your database.";s:7:"package";s:5:"Views";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.18";s:7:"project";s:5:"views";s:9:"datestamp";s:10:"1423647793";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/views/views_export/views_export.module', 'views_export', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:14:"Views exporter";s:11:"description";s:40:"Allows exporting multiple views at once.";s:7:"package";s:5:"Views";s:12:"dependencies";a:1:{i:0;s:5:"views";}s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-2.18";s:7:"project";s:5:"views";s:9:"datestamp";s:10:"1423647793";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/views/views_ui.module', 'views_ui', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:8:"Views UI";s:11:"description";s:93:"Administrative interface to views. Without this module, you cannot create or edit your views.";s:7:"package";s:5:"Views";s:4:"core";s:3:"6.x";s:12:"dependencies";a:1:{i:0;s:5:"views";}s:7:"version";s:8:"6.x-2.18";s:7:"project";s:5:"views";s:9:"datestamp";s:10:"1423647793";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
@@ -1700,7 +1594,7 @@ INSERT INTO `system` (`filename`, `name`, `type`, `owner`, `status`, `throttle`,
 ('sites/all/modules/page_title/tests/page_title_views_test.module', 'page_title_views_test', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:27:"Page Title Views SimpleTest";s:11:"description";s:61:"SimpleTest dependency modue for testing Views with Page Title";s:4:"core";s:3:"6.x";s:7:"package";s:11:"Development";s:12:"dependencies";a:2:{i:0;s:10:"page_title";i:1;s:5:"views";}s:7:"version";s:7:"6.x-2.7";s:7:"project";s:10:"page_title";s:9:"datestamp";s:10:"1336556783";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}');
 INSERT INTO `system` (`filename`, `name`, `type`, `owner`, `status`, `throttle`, `bootstrap`, `schema_version`, `weight`, `info`) VALUES
 ('sites/all/modules/page_title/page_title.module', 'page_title', 'module', '', 1, 0, 0, 6200, 0, 'a:10:{s:4:"name";s:10:"Page Title";s:11:"description";s:60:"Enhanced control over the page title (in the &lt;head> tag).";s:12:"dependencies";a:1:{i:0;s:5:"token";}s:4:"core";s:3:"6.x";s:7:"package";s:3:"SEO";s:7:"version";s:7:"6.x-2.7";s:7:"project";s:10:"page_title";s:9:"datestamp";s:10:"1336556783";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
-('sites/all/modules/google_analytics/googleanalytics.module', 'googleanalytics', 'module', '', 1, 0, 0, 6401, 0, 'a:10:{s:4:"name";s:16:"Google Analytics";s:11:"description";s:102:"Allows your site to be tracked by Google Analytics by adding a Javascript tracking code to every page.";s:4:"core";s:3:"6.x";s:7:"package";s:10:"Statistics";s:7:"version";s:7:"6.x-4.1";s:7:"project";s:16:"google_analytics";s:9:"datestamp";s:10:"1417276686";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/google_analytics/googleanalytics.module', 'googleanalytics', 'module', '', 1, 0, 0, 6401, 0, 'a:10:{s:4:"name";s:16:"Google Analytics";s:11:"description";s:102:"Allows your site to be tracked by Google Analytics by adding a Javascript tracking code to every page.";s:4:"core";s:3:"6.x";s:7:"package";s:10:"Statistics";s:7:"version";s:7:"6.x-4.3";s:7:"project";s:16:"google_analytics";s:9:"datestamp";s:10:"1470779941";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/cck/modules/imagefield_zip/imagefield_zip.module', 'imagefield_zip', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:32:"ImageField Zip/HTML5 Bulk Upload";s:11:"description";s:114:"Upload via HTML5 or a zip file containing images that will automatically be populated to a multi-value imagefield.";s:7:"package";s:3:"CCK";s:12:"dependencies";a:1:{i:0;s:10:"imagefield";}s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-1.2";s:7:"project";s:14:"imagefield_zip";s:9:"datestamp";s:10:"1319664634";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/nodeformcols/nfcbiblio.module', 'nfcbiblio', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:20:"Biblio compatability";s:11:"description";s:30:"Adds support for biblio fields";s:12:"dependencies";a:2:{i:0;s:12:"nodeformcols";i:1;s:6:"biblio";}s:4:"core";s:3:"6.x";s:7:"package";s:17:"Node form columns";s:7:"version";s:7:"6.x-1.7";s:7:"project";s:12:"nodeformcols";s:9:"datestamp";s:10:"1389798524";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/nodeformcols/nfccaptcha.module', 'nfccaptcha', 'module', '', 0, 0, 0, -1, 0, 'a:10:{s:4:"name";s:21:"CAPTCHA compatability";s:11:"description";s:38:"Adds support for CAPTCHA in node forms";s:12:"dependencies";a:2:{i:0;s:12:"nodeformcols";i:1;s:7:"captcha";}s:4:"core";s:3:"6.x";s:7:"package";s:17:"Node form columns";s:7:"version";s:7:"6.x-1.7";s:7:"project";s:12:"nodeformcols";s:9:"datestamp";s:10:"1389798524";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
@@ -1717,15 +1611,12 @@ INSERT INTO `system` (`filename`, `name`, `type`, `owner`, `status`, `throttle`,
 --
 
 CREATE TABLE IF NOT EXISTS `term_data` (
-  `tid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tid` int(10) unsigned NOT NULL,
   `vid` int(10) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `description` longtext,
-  `weight` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`tid`),
-  KEY `taxonomy_tree` (`vid`,`weight`,`name`),
-  KEY `vid_name` (`vid`,`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `weight` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1735,9 +1626,7 @@ CREATE TABLE IF NOT EXISTS `term_data` (
 
 CREATE TABLE IF NOT EXISTS `term_hierarchy` (
   `tid` int(10) unsigned NOT NULL DEFAULT '0',
-  `parent` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`tid`,`parent`),
-  KEY `parent` (`parent`)
+  `parent` int(10) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1749,10 +1638,7 @@ CREATE TABLE IF NOT EXISTS `term_hierarchy` (
 CREATE TABLE IF NOT EXISTS `term_node` (
   `nid` int(10) unsigned NOT NULL DEFAULT '0',
   `vid` int(10) unsigned NOT NULL DEFAULT '0',
-  `tid` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`tid`,`vid`),
-  KEY `vid` (`vid`),
-  KEY `nid` (`nid`)
+  `tid` int(10) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1762,13 +1648,10 @@ CREATE TABLE IF NOT EXISTS `term_node` (
 --
 
 CREATE TABLE IF NOT EXISTS `term_relation` (
-  `trid` int(11) NOT NULL AUTO_INCREMENT,
+  `trid` int(11) NOT NULL,
   `tid1` int(10) unsigned NOT NULL DEFAULT '0',
-  `tid2` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`trid`),
-  UNIQUE KEY `tid1_tid2` (`tid1`,`tid2`),
-  KEY `tid2` (`tid2`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `tid2` int(10) unsigned NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1777,13 +1660,10 @@ CREATE TABLE IF NOT EXISTS `term_relation` (
 --
 
 CREATE TABLE IF NOT EXISTS `term_synonym` (
-  `tsid` int(11) NOT NULL AUTO_INCREMENT,
+  `tsid` int(11) NOT NULL,
   `tid` int(10) unsigned NOT NULL DEFAULT '0',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`tsid`),
-  KEY `tid` (`tid`),
-  KEY `name_tid` (`name`,`tid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `name` varchar(255) NOT NULL DEFAULT ''
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1792,21 +1672,19 @@ CREATE TABLE IF NOT EXISTS `term_synonym` (
 --
 
 CREATE TABLE IF NOT EXISTS `url_alias` (
-  `pid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(10) unsigned NOT NULL,
   `src` varchar(128) NOT NULL DEFAULT '',
   `dst` varchar(128) NOT NULL DEFAULT '',
-  `language` varchar(12) NOT NULL DEFAULT '',
-  PRIMARY KEY (`pid`),
-  UNIQUE KEY `dst_language_pid` (`dst`,`language`,`pid`),
-  KEY `src_language_pid` (`src`,`language`,`pid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `language` varchar(12) NOT NULL DEFAULT ''
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `url_alias`
 --
 
 INSERT INTO `url_alias` (`pid`, `src`, `dst`, `language`) VALUES
-(1, 'user/3', 'users/manager', '');
+(1, 'user/3', 'users/manager', ''),
+(2, 'user/1', 'users/admin', '');
 
 -- --------------------------------------------------------
 
@@ -1815,7 +1693,7 @@ INSERT INTO `url_alias` (`pid`, `src`, `dst`, `language`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL,
   `name` varchar(60) NOT NULL DEFAULT '',
   `pass` varchar(32) NOT NULL DEFAULT '',
   `mail` varchar(64) DEFAULT '',
@@ -1833,13 +1711,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `language` varchar(12) NOT NULL DEFAULT '',
   `picture` varchar(255) NOT NULL DEFAULT '',
   `init` varchar(64) DEFAULT '',
-  `data` longtext,
-  PRIMARY KEY (`uid`),
-  UNIQUE KEY `name` (`name`),
-  KEY `access` (`access`),
-  KEY `created` (`created`),
-  KEY `mail` (`mail`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  `data` longtext
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
@@ -1847,7 +1720,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`uid`, `name`, `pass`, `mail`, `mode`, `sort`, `threshold`, `theme`, `signature`, `signature_format`, `created`, `access`, `login`, `status`, `timezone`, `language`, `picture`, `init`, `data`) VALUES
 (0, '', '', '', 0, 0, 0, '', '', 0, 0, 0, 0, 0, NULL, '', '', '', NULL),
-(1, 'admin', '3d801aa532c1cec3ee82d87a99fdf63f', 'dev@virdini.net', 0, 0, 0, '', '', 0, 1346030797, 1428831335, 1428831335, 1, NULL, '', '', 'dev@virdini.net', 'a:0:{}'),
+(1, 'admin', 'd8481291c019038f76036dc237645ed1', 'dev@virdini.net', 0, 0, 0, '', '', 0, 1346030797, 1475238939, 1475237151, 1, NULL, '', '', 'dev@virdini.net', 'a:1:{s:13:"form_build_id";s:48:"form-FLpvOJQQ3mT0426RlyzNWRdjGKijYOUOEBsHyrnIbHc";}'),
 (3, 'manager', '3d801aa532c1cec3ee82d87a99fdf63f', 'info@virdini.com', 0, 0, 0, '', '', 0, 1346034402, 1346034402, 1346034435, 0, NULL, '', '', 'info@virdini.com', 'a:1:{s:13:"form_build_id";s:37:"form-51c0b2e007e88bfb82e173cb8cba8782";}');
 
 -- --------------------------------------------------------
@@ -1858,9 +1731,7 @@ INSERT INTO `users` (`uid`, `name`, `pass`, `mail`, `mode`, `sort`, `threshold`,
 
 CREATE TABLE IF NOT EXISTS `users_roles` (
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
-  `rid` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`uid`,`rid`),
-  KEY `rid` (`rid`)
+  `rid` int(10) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -1878,8 +1749,7 @@ INSERT INTO `users_roles` (`uid`, `rid`) VALUES
 
 CREATE TABLE IF NOT EXISTS `variable` (
   `name` varchar(128) NOT NULL DEFAULT '',
-  `value` longtext NOT NULL,
-  PRIMARY KEY (`name`)
+  `value` longtext NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -1904,7 +1774,7 @@ INSERT INTO `variable` (`name`, `value`) VALUES
 ('comment_page', 'i:0;'),
 ('theme_settings', 'a:1:{s:21:"toggle_node_info_page";b:0;}'),
 ('drupal_http_request_fails', 'b:0;'),
-('css_js_query_string', 's:20:"XtCWNdv6RUayFz2wQu3c";'),
+('css_js_query_string', 's:20:"M4XtCWNdv6RUayFz2wQu";'),
 ('install_profile', 's:7:"default";'),
 ('content_schema_version', 'i:6009;'),
 ('imce_profiles', 'a:2:{i:1;a:10:{s:4:"name";s:6:"User-1";s:7:"usertab";i:1;s:8:"filesize";i:0;s:5:"quota";i:0;s:7:"tuquota";i:0;s:10:"extensions";s:1:"*";s:10:"dimensions";s:9:"1200x1200";s:7:"filenum";i:0;s:11:"directories";a:1:{i:0;a:7:{s:4:"name";s:1:".";s:6:"subnav";i:1;s:6:"browse";i:1;s:6:"upload";i:1;s:5:"thumb";i:1;s:6:"delete";i:1;s:6:"resize";i:1;}}s:10:"thumbnails";a:3:{i:0;a:4:{s:4:"name";s:5:"Small";s:10:"dimensions";s:5:"90x90";s:6:"prefix";s:6:"small_";s:6:"suffix";s:0:"";}i:1;a:4:{s:4:"name";s:6:"Medium";s:10:"dimensions";s:7:"120x120";s:6:"prefix";s:7:"medium_";s:6:"suffix";s:0:"";}i:2;a:4:{s:4:"name";s:5:"Large";s:10:"dimensions";s:7:"180x180";s:6:"prefix";s:6:"large_";s:6:"suffix";s:0:"";}}}i:2;a:10:{s:4:"name";s:7:"manager";s:7:"usertab";i:0;s:8:"filesize";s:1:"0";s:5:"quota";s:1:"0";s:7:"tuquota";s:1:"0";s:10:"extensions";s:1:"*";s:10:"dimensions";s:9:"1200x1200";s:7:"filenum";s:1:"0";s:11:"directories";a:1:{i:0;a:7:{s:4:"name";s:7:"manager";s:6:"subnav";i:1;s:6:"browse";i:1;s:6:"upload";i:1;s:5:"thumb";i:1;s:6:"delete";i:1;s:6:"resize";i:1;}}s:10:"thumbnails";a:1:{i:0;a:4:{s:4:"name";s:5:"Thumb";s:10:"dimensions";s:5:"90x90";s:6:"prefix";s:6:"thumb_";s:6:"suffix";s:0:"";}}}}'),
@@ -1938,7 +1808,7 @@ INSERT INTO `variable` (`name`, `value`) VALUES
 ('pathauto_node_applytofeeds', 's:0:"";'),
 ('pathauto_punctuation_hyphen', 's:1:"1";'),
 ('file_directory_temp', 's:23:"sites/default/files/tmp";'),
-('javascript_parsed', 'a:10:{i:0;s:14:"misc/jquery.js";i:1;s:14:"misc/drupal.js";i:2;s:46:"sites/all/modules/poormanscron/poormanscron.js";i:3;s:49:"sites/all/modules/admin/includes/jquery.cookie.js";i:4;s:52:"sites/all/modules/admin/includes/jquery.drilldown.js";i:5;s:49:"sites/all/modules/admin/includes/admin.toolbar.js";i:6;s:46:"sites/all/modules/admin/includes/admin.menu.js";i:7;s:37:"sites/all/themes/virdini/js/script.js";i:8;s:30:"sites/all/themes/tao/js/tao.js";i:9;s:34:"sites/all/themes/rubik/js/rubik.js";}'),
+('javascript_parsed', 'a:10:{i:0;s:14:"misc/jquery.js";i:1;s:14:"misc/drupal.js";i:2;s:46:"sites/all/modules/poormanscron/poormanscron.js";i:3;s:49:"sites/all/modules/admin/includes/jquery.cookie.js";i:4;s:52:"sites/all/modules/admin/includes/jquery.drilldown.js";i:5;s:49:"sites/all/modules/admin/includes/admin.toolbar.js";i:6;s:46:"sites/all/modules/admin/includes/admin.menu.js";i:7;s:19:"misc/tableheader.js";i:8;s:30:"sites/all/themes/tao/js/tao.js";i:9;s:34:"sites/all/themes/rubik/js/rubik.js";}'),
 ('preprocess_js', 's:1:"0";'),
 ('clear', 's:17:"Clear cached data";'),
 ('content_extra_weights_page', 'a:8:{s:5:"title";s:2:"-5";s:10:"body_field";s:1:"0";s:20:"revision_information";s:2:"20";s:6:"author";s:2:"20";s:7:"options";s:2:"25";s:4:"menu";s:2:"-2";s:4:"path";s:2:"30";s:9:"nodewords";s:2:"10";}'),
@@ -2006,7 +1876,7 @@ INSERT INTO `variable` (`name`, `value`) VALUES
 ('node_preview', 's:1:"0";'),
 ('pathauto_node_supportsfeeds', 's:4:"feed";'),
 ('virdini_jquery_replace', 'b:1;'),
-('cron_last', 'i:1428831323;'),
+('cron_last', 'i:1475237104;'),
 ('pathauto_punctuation_double_quotes', 's:1:"0";'),
 ('pathauto_punctuation_backtick', 's:1:"0";'),
 ('pathauto_punctuation_comma', 's:1:"0";'),
@@ -2086,9 +1956,7 @@ CREATE TABLE IF NOT EXISTS `views_display` (
   `display_title` varchar(64) NOT NULL DEFAULT '',
   `display_plugin` varchar(64) NOT NULL DEFAULT '',
   `position` int(11) DEFAULT '0',
-  `display_options` longtext,
-  PRIMARY KEY (`vid`,`id`),
-  KEY `vid` (`vid`,`position`)
+  `display_options` longtext
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2102,9 +1970,7 @@ CREATE TABLE IF NOT EXISTS `views_object_cache` (
   `name` varchar(32) DEFAULT NULL,
   `obj` varchar(32) DEFAULT NULL,
   `updated` int(10) unsigned NOT NULL DEFAULT '0',
-  `data` longtext,
-  KEY `sid_obj_name` (`sid`,`obj`,`name`),
-  KEY `updated` (`updated`)
+  `data` longtext
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2114,15 +1980,13 @@ CREATE TABLE IF NOT EXISTS `views_object_cache` (
 --
 
 CREATE TABLE IF NOT EXISTS `views_view` (
-  `vid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vid` int(10) unsigned NOT NULL,
   `name` varchar(32) NOT NULL DEFAULT '',
   `description` varchar(255) DEFAULT '',
   `tag` varchar(255) DEFAULT '',
   `base_table` varchar(64) NOT NULL DEFAULT '',
-  `core` int(11) DEFAULT '0',
-  PRIMARY KEY (`vid`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `core` int(11) DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2131,7 +1995,7 @@ CREATE TABLE IF NOT EXISTS `views_view` (
 --
 
 CREATE TABLE IF NOT EXISTS `vocabulary` (
-  `vid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vid` int(10) unsigned NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `description` longtext,
   `help` varchar(255) NOT NULL DEFAULT '',
@@ -2141,10 +2005,8 @@ CREATE TABLE IF NOT EXISTS `vocabulary` (
   `required` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `tags` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `module` varchar(255) NOT NULL DEFAULT '',
-  `weight` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`vid`),
-  KEY `list` (`weight`,`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `weight` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `vocabulary`
@@ -2161,9 +2023,7 @@ INSERT INTO `vocabulary` (`vid`, `name`, `description`, `help`, `relations`, `hi
 
 CREATE TABLE IF NOT EXISTS `vocabulary_node_types` (
   `vid` int(10) unsigned NOT NULL DEFAULT '0',
-  `type` varchar(32) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type`,`vid`),
-  KEY `vid` (`vid`)
+  `type` varchar(32) NOT NULL DEFAULT ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2173,7 +2033,7 @@ CREATE TABLE IF NOT EXISTS `vocabulary_node_types` (
 --
 
 CREATE TABLE IF NOT EXISTS `watchdog` (
-  `wid` int(11) NOT NULL AUTO_INCREMENT,
+  `wid` int(11) NOT NULL,
   `uid` int(11) NOT NULL DEFAULT '0',
   `type` varchar(16) NOT NULL DEFAULT '',
   `message` longtext NOT NULL,
@@ -2183,10 +2043,8 @@ CREATE TABLE IF NOT EXISTS `watchdog` (
   `location` text NOT NULL,
   `referer` text,
   `hostname` varchar(128) NOT NULL DEFAULT '',
-  `timestamp` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`wid`),
-  KEY `type` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `timestamp` int(11) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2197,8 +2055,7 @@ CREATE TABLE IF NOT EXISTS `watchdog` (
 CREATE TABLE IF NOT EXISTS `wysiwyg` (
   `format` int(11) NOT NULL DEFAULT '0',
   `editor` varchar(128) NOT NULL DEFAULT '',
-  `settings` text,
-  PRIMARY KEY (`format`)
+  `settings` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -2218,11 +2075,667 @@ INSERT INTO `wysiwyg` (`format`, `editor`, `settings`) VALUES
 CREATE TABLE IF NOT EXISTS `wysiwyg_user` (
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
   `format` int(11) DEFAULT NULL,
-  `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  KEY `uid` (`uid`),
-  KEY `format` (`format`)
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `access`
+--
+ALTER TABLE `access`
+  ADD PRIMARY KEY (`aid`);
+
+--
+-- Indexes for table `actions`
+--
+ALTER TABLE `actions`
+  ADD PRIMARY KEY (`aid`);
+
+--
+-- Indexes for table `actions_aid`
+--
+ALTER TABLE `actions_aid`
+  ADD PRIMARY KEY (`aid`);
+
+--
+-- Indexes for table `authmap`
+--
+ALTER TABLE `authmap`
+  ADD PRIMARY KEY (`aid`),
+  ADD UNIQUE KEY `authname` (`authname`);
+
+--
+-- Indexes for table `batch`
+--
+ALTER TABLE `batch`
+  ADD PRIMARY KEY (`bid`),
+  ADD KEY `token` (`token`);
+
+--
+-- Indexes for table `blocks`
+--
+ALTER TABLE `blocks`
+  ADD PRIMARY KEY (`bid`),
+  ADD UNIQUE KEY `tmd` (`theme`,`module`,`delta`),
+  ADD KEY `list` (`theme`,`status`,`region`,`weight`,`module`);
+
+--
+-- Indexes for table `blocks_roles`
+--
+ALTER TABLE `blocks_roles`
+  ADD PRIMARY KEY (`module`,`delta`,`rid`),
+  ADD KEY `rid` (`rid`);
+
+--
+-- Indexes for table `boxes`
+--
+ALTER TABLE `boxes`
+  ADD PRIMARY KEY (`bid`),
+  ADD UNIQUE KEY `info` (`info`);
+
+--
+-- Indexes for table `cache`
+--
+ALTER TABLE `cache`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `cache_block`
+--
+ALTER TABLE `cache_block`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `cache_content`
+--
+ALTER TABLE `cache_content`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `cache_filter`
+--
+ALTER TABLE `cache_filter`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `cache_form`
+--
+ALTER TABLE `cache_form`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `cache_l10n_update`
+--
+ALTER TABLE `cache_l10n_update`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `cache_menu`
+--
+ALTER TABLE `cache_menu`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `cache_page`
+--
+ALTER TABLE `cache_page`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `cache_views`
+--
+ALTER TABLE `cache_views`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `cache_views_data`
+--
+ALTER TABLE `cache_views_data`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `pid` (`pid`),
+  ADD KEY `nid` (`nid`),
+  ADD KEY `comment_uid` (`uid`),
+  ADD KEY `status` (`status`);
+
+--
+-- Indexes for table `content_node_field`
+--
+ALTER TABLE `content_node_field`
+  ADD PRIMARY KEY (`field_name`);
+
+--
+-- Indexes for table `content_node_field_instance`
+--
+ALTER TABLE `content_node_field_instance`
+  ADD PRIMARY KEY (`field_name`,`type_name`);
+
+--
+-- Indexes for table `files`
+--
+ALTER TABLE `files`
+  ADD PRIMARY KEY (`fid`),
+  ADD KEY `uid` (`uid`),
+  ADD KEY `status` (`status`),
+  ADD KEY `timestamp` (`timestamp`);
+
+--
+-- Indexes for table `filters`
+--
+ALTER TABLE `filters`
+  ADD PRIMARY KEY (`fid`),
+  ADD UNIQUE KEY `fmd` (`format`,`module`,`delta`),
+  ADD KEY `list` (`format`,`weight`,`module`,`delta`);
+
+--
+-- Indexes for table `filter_formats`
+--
+ALTER TABLE `filter_formats`
+  ADD PRIMARY KEY (`format`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `flood`
+--
+ALTER TABLE `flood`
+  ADD PRIMARY KEY (`fid`),
+  ADD KEY `allow` (`event`,`hostname`,`timestamp`);
+
+--
+-- Indexes for table `history`
+--
+ALTER TABLE `history`
+  ADD PRIMARY KEY (`uid`,`nid`),
+  ADD KEY `nid` (`nid`);
+
+--
+-- Indexes for table `imagecache_action`
+--
+ALTER TABLE `imagecache_action`
+  ADD PRIMARY KEY (`actionid`),
+  ADD KEY `presetid` (`presetid`);
+
+--
+-- Indexes for table `imagecache_preset`
+--
+ALTER TABLE `imagecache_preset`
+  ADD PRIMARY KEY (`presetid`);
+
+--
+-- Indexes for table `imce_files`
+--
+ALTER TABLE `imce_files`
+  ADD PRIMARY KEY (`fid`);
+
+--
+-- Indexes for table `l10n_update_file`
+--
+ALTER TABLE `l10n_update_file`
+  ADD PRIMARY KEY (`project`,`language`);
+
+--
+-- Indexes for table `l10n_update_project`
+--
+ALTER TABLE `l10n_update_project`
+  ADD PRIMARY KEY (`name`);
+
+--
+-- Indexes for table `languages`
+--
+ALTER TABLE `languages`
+  ADD PRIMARY KEY (`language`),
+  ADD KEY `list` (`weight`,`name`);
+
+--
+-- Indexes for table `locales_source`
+--
+ALTER TABLE `locales_source`
+  ADD PRIMARY KEY (`lid`),
+  ADD KEY `source` (`source`(30));
+
+--
+-- Indexes for table `locales_target`
+--
+ALTER TABLE `locales_target`
+  ADD PRIMARY KEY (`language`,`lid`,`plural`),
+  ADD KEY `lid` (`lid`),
+  ADD KEY `plid` (`plid`),
+  ADD KEY `plural` (`plural`);
+
+--
+-- Indexes for table `menu_custom`
+--
+ALTER TABLE `menu_custom`
+  ADD PRIMARY KEY (`menu_name`);
+
+--
+-- Indexes for table `menu_links`
+--
+ALTER TABLE `menu_links`
+  ADD PRIMARY KEY (`mlid`),
+  ADD KEY `path_menu` (`link_path`(128),`menu_name`),
+  ADD KEY `menu_plid_expand_child` (`menu_name`,`plid`,`expanded`,`has_children`),
+  ADD KEY `menu_parents` (`menu_name`,`p1`,`p2`,`p3`,`p4`,`p5`,`p6`,`p7`,`p8`,`p9`),
+  ADD KEY `router_path` (`router_path`(128));
+
+--
+-- Indexes for table `menu_router`
+--
+ALTER TABLE `menu_router`
+  ADD PRIMARY KEY (`path`),
+  ADD KEY `fit` (`fit`),
+  ADD KEY `tab_parent` (`tab_parent`),
+  ADD KEY `tab_root_weight_title` (`tab_root`(64),`weight`,`title`);
+
+--
+-- Indexes for table `node`
+--
+ALTER TABLE `node`
+  ADD PRIMARY KEY (`nid`),
+  ADD UNIQUE KEY `vid` (`vid`),
+  ADD KEY `node_changed` (`changed`),
+  ADD KEY `node_created` (`created`),
+  ADD KEY `node_moderate` (`moderate`),
+  ADD KEY `node_promote_status` (`promote`,`status`),
+  ADD KEY `node_status_type` (`status`,`type`,`nid`),
+  ADD KEY `node_title_type` (`title`,`type`(4)),
+  ADD KEY `node_type` (`type`(4)),
+  ADD KEY `uid` (`uid`),
+  ADD KEY `tnid` (`tnid`),
+  ADD KEY `translate` (`translate`);
+
+--
+-- Indexes for table `nodewords`
+--
+ALTER TABLE `nodewords`
+  ADD PRIMARY KEY (`mtid`),
+  ADD UNIQUE KEY `nodewords_type_id_name` (`type`,`id`,`name`),
+  ADD KEY `nodewords_name` (`name`(6)),
+  ADD KEY `nodewords_type_id` (`type`,`id`);
+
+--
+-- Indexes for table `nodewords_custom`
+--
+ALTER TABLE `nodewords_custom`
+  ADD PRIMARY KEY (`pid`);
+
+--
+-- Indexes for table `node_access`
+--
+ALTER TABLE `node_access`
+  ADD PRIMARY KEY (`nid`,`gid`,`realm`);
+
+--
+-- Indexes for table `node_comment_statistics`
+--
+ALTER TABLE `node_comment_statistics`
+  ADD PRIMARY KEY (`nid`),
+  ADD KEY `node_comment_timestamp` (`last_comment_timestamp`),
+  ADD KEY `comment_count` (`comment_count`),
+  ADD KEY `last_comment_uid` (`last_comment_uid`);
+
+--
+-- Indexes for table `node_counter`
+--
+ALTER TABLE `node_counter`
+  ADD PRIMARY KEY (`nid`);
+
+--
+-- Indexes for table `node_revisions`
+--
+ALTER TABLE `node_revisions`
+  ADD PRIMARY KEY (`vid`),
+  ADD KEY `nid` (`nid`),
+  ADD KEY `uid` (`uid`);
+
+--
+-- Indexes for table `node_type`
+--
+ALTER TABLE `node_type`
+  ADD PRIMARY KEY (`type`);
+
+--
+-- Indexes for table `page_title`
+--
+ALTER TABLE `page_title`
+  ADD PRIMARY KEY (`type`,`id`);
+
+--
+-- Indexes for table `pathauto_persist`
+--
+ALTER TABLE `pathauto_persist`
+  ADD PRIMARY KEY (`entity_type`,`entity_id`);
+
+--
+-- Indexes for table `permission`
+--
+ALTER TABLE `permission`
+  ADD PRIMARY KEY (`pid`),
+  ADD KEY `rid` (`rid`);
+
+--
+-- Indexes for table `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`rid`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `semaphore`
+--
+ALTER TABLE `semaphore`
+  ADD PRIMARY KEY (`name`),
+  ADD KEY `expire` (`expire`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`sid`),
+  ADD KEY `timestamp` (`timestamp`),
+  ADD KEY `uid` (`uid`);
+
+--
+-- Indexes for table `system`
+--
+ALTER TABLE `system`
+  ADD PRIMARY KEY (`filename`),
+  ADD KEY `modules` (`type`(12),`status`,`weight`,`filename`),
+  ADD KEY `bootstrap` (`type`(12),`status`,`bootstrap`,`weight`,`filename`),
+  ADD KEY `type_name` (`type`(12),`name`);
+
+--
+-- Indexes for table `term_data`
+--
+ALTER TABLE `term_data`
+  ADD PRIMARY KEY (`tid`),
+  ADD KEY `taxonomy_tree` (`vid`,`weight`,`name`),
+  ADD KEY `vid_name` (`vid`,`name`);
+
+--
+-- Indexes for table `term_hierarchy`
+--
+ALTER TABLE `term_hierarchy`
+  ADD PRIMARY KEY (`tid`,`parent`),
+  ADD KEY `parent` (`parent`);
+
+--
+-- Indexes for table `term_node`
+--
+ALTER TABLE `term_node`
+  ADD PRIMARY KEY (`tid`,`vid`),
+  ADD KEY `vid` (`vid`),
+  ADD KEY `nid` (`nid`);
+
+--
+-- Indexes for table `term_relation`
+--
+ALTER TABLE `term_relation`
+  ADD PRIMARY KEY (`trid`),
+  ADD UNIQUE KEY `tid1_tid2` (`tid1`,`tid2`),
+  ADD KEY `tid2` (`tid2`);
+
+--
+-- Indexes for table `term_synonym`
+--
+ALTER TABLE `term_synonym`
+  ADD PRIMARY KEY (`tsid`),
+  ADD KEY `tid` (`tid`),
+  ADD KEY `name_tid` (`name`,`tid`);
+
+--
+-- Indexes for table `url_alias`
+--
+ALTER TABLE `url_alias`
+  ADD PRIMARY KEY (`pid`),
+  ADD UNIQUE KEY `dst_language_pid` (`dst`,`language`,`pid`),
+  ADD KEY `src_language_pid` (`src`,`language`,`pid`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`uid`),
+  ADD UNIQUE KEY `name` (`name`),
+  ADD KEY `access` (`access`),
+  ADD KEY `created` (`created`),
+  ADD KEY `mail` (`mail`);
+
+--
+-- Indexes for table `users_roles`
+--
+ALTER TABLE `users_roles`
+  ADD PRIMARY KEY (`uid`,`rid`),
+  ADD KEY `rid` (`rid`);
+
+--
+-- Indexes for table `variable`
+--
+ALTER TABLE `variable`
+  ADD PRIMARY KEY (`name`);
+
+--
+-- Indexes for table `views_display`
+--
+ALTER TABLE `views_display`
+  ADD PRIMARY KEY (`vid`,`id`),
+  ADD KEY `vid` (`vid`,`position`);
+
+--
+-- Indexes for table `views_object_cache`
+--
+ALTER TABLE `views_object_cache`
+  ADD KEY `sid_obj_name` (`sid`,`obj`,`name`),
+  ADD KEY `updated` (`updated`);
+
+--
+-- Indexes for table `views_view`
+--
+ALTER TABLE `views_view`
+  ADD PRIMARY KEY (`vid`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `vocabulary`
+--
+ALTER TABLE `vocabulary`
+  ADD PRIMARY KEY (`vid`),
+  ADD KEY `list` (`weight`,`name`);
+
+--
+-- Indexes for table `vocabulary_node_types`
+--
+ALTER TABLE `vocabulary_node_types`
+  ADD PRIMARY KEY (`type`,`vid`),
+  ADD KEY `vid` (`vid`);
+
+--
+-- Indexes for table `watchdog`
+--
+ALTER TABLE `watchdog`
+  ADD PRIMARY KEY (`wid`),
+  ADD KEY `type` (`type`);
+
+--
+-- Indexes for table `wysiwyg`
+--
+ALTER TABLE `wysiwyg`
+  ADD PRIMARY KEY (`format`);
+
+--
+-- Indexes for table `wysiwyg_user`
+--
+ALTER TABLE `wysiwyg_user`
+  ADD KEY `uid` (`uid`),
+  ADD KEY `format` (`format`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `access`
+--
+ALTER TABLE `access`
+  MODIFY `aid` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `actions_aid`
+--
+ALTER TABLE `actions_aid`
+  MODIFY `aid` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `authmap`
+--
+ALTER TABLE `authmap`
+  MODIFY `aid` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `batch`
+--
+ALTER TABLE `batch`
+  MODIFY `bid` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+--
+-- AUTO_INCREMENT for table `blocks`
+--
+ALTER TABLE `blocks`
+  MODIFY `bid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
+--
+-- AUTO_INCREMENT for table `boxes`
+--
+ALTER TABLE `boxes`
+  MODIFY `bid` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `files`
+--
+ALTER TABLE `files`
+  MODIFY `fid` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+--
+-- AUTO_INCREMENT for table `filters`
+--
+ALTER TABLE `filters`
+  MODIFY `fid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT for table `filter_formats`
+--
+ALTER TABLE `filter_formats`
+  MODIFY `format` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `flood`
+--
+ALTER TABLE `flood`
+  MODIFY `fid` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `imagecache_action`
+--
+ALTER TABLE `imagecache_action`
+  MODIFY `actionid` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `imagecache_preset`
+--
+ALTER TABLE `imagecache_preset`
+  MODIFY `presetid` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `locales_source`
+--
+ALTER TABLE `locales_source`
+  MODIFY `lid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
+--
+-- AUTO_INCREMENT for table `menu_links`
+--
+ALTER TABLE `menu_links`
+  MODIFY `mlid` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=284;
+--
+-- AUTO_INCREMENT for table `node`
+--
+ALTER TABLE `node`
+  MODIFY `nid` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `nodewords`
+--
+ALTER TABLE `nodewords`
+  MODIFY `mtid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `nodewords_custom`
+--
+ALTER TABLE `nodewords_custom`
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `node_revisions`
+--
+ALTER TABLE `node_revisions`
+  MODIFY `vid` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `permission`
+--
+ALTER TABLE `permission`
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `role`
+--
+ALTER TABLE `role`
+  MODIFY `rid` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `term_data`
+--
+ALTER TABLE `term_data`
+  MODIFY `tid` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `term_relation`
+--
+ALTER TABLE `term_relation`
+  MODIFY `trid` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `term_synonym`
+--
+ALTER TABLE `term_synonym`
+  MODIFY `tsid` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `url_alias`
+--
+ALTER TABLE `url_alias`
+  MODIFY `pid` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `views_view`
+--
+ALTER TABLE `views_view`
+  MODIFY `vid` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `vocabulary`
+--
+ALTER TABLE `vocabulary`
+  MODIFY `vid` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `watchdog`
+--
+ALTER TABLE `watchdog`
+  MODIFY `wid` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
